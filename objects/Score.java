@@ -4,11 +4,11 @@ public class Score implements Comparable<Score>{
 	private double pointsLost;
 	private double percentage;
 	private String comment;
-	private boolean hasComment = false;
 
-	public Score(double pointsLost, double maxScore) {
+
+	public Score(double pointsLost, String comment) {
 		this.pointsLost = pointsLost;
-		this.comment = "";
+		this.comment = comment;
 		this.percentage = 0;
 	}
 
@@ -34,16 +34,13 @@ public class Score implements Comparable<Score>{
 
 	public void setComment(String comment) {
 		this.comment = comment;
-		this.hasComment = true;
 	}
 
 	public boolean hasComment() {
-		return hasComment;
+		return !comment.equals("");
 	}
 
-	public void setHasComment(boolean hasComment) {
-		this.hasComment = hasComment;
-	}
+
 
 	public double calculateScore(double maxScore) {
 		return maxScore - this.pointsLost;

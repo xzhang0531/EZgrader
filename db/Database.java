@@ -159,8 +159,7 @@ public class Database {
 				String collegecode = rs2.getString(5);
 				String year = rs2.getString(6);
 				String section = rs2.getString(7);
-				CourseName cname = new CourseName(coursename, coursecode, section, semester, year, collegecode);
-				Course newCourse = new Course(courseid, cname);
+				Course newCourse = new Course(courseid, coursename, coursecode, section, semester, year, collegecode);
 				courseList.add(newCourse);
 			}
 			//Add assignments to list
@@ -175,7 +174,7 @@ public class Database {
 				double curve = rs3.getDouble(6);
 				Assignment newAssign = new Assignment(componentname, category, weight, maxraw, curve);
 				for(Course course: courseList) {
-					if(course.courseid == courseid) course.addAssignment(newAssign);
+					if(course.getCourseId() == courseid) course.addAssignment(newAssign);
 				}	
 			}
 			//Add scores to list
@@ -190,8 +189,8 @@ public class Database {
 				
 				Score newScore = new Score(pointslost, comment);
 				for(Course course: courseList) {
-					if(course.courseid == courseid) {
-						for(Assignment assignment:course.assignmentList) {
+					if(course.getCourseId() == courseid) {
+						for(Assignment assignment:course.getAssignmentList()) {
 							if(assignment.getName().equals(componentname)) {
 								assignment.getScoreList().put(getStudentById(buid), newScore);
 							}
@@ -212,7 +211,7 @@ public class Database {
 					}
 				}
 				for(Course course: this.courseList) {
-					if(course.courseid == courseid) {
+					if(course.getCourseId() == courseid) {
 						course.addStudent(getStudentById(buid));
 					}
 				}
@@ -241,7 +240,7 @@ public class Database {
 	
 	public Course getCourseById(int courseid) {
 		for (Course course: courseList) {
-			if(course.courseid == courseid) {
+			if(course.getCourseId() == courseid) {
 				return course;
 			}
 		}
@@ -254,7 +253,7 @@ public class Database {
 		try {
 			stmt=conn.createStatement();
 			stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
-					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().firstName + "', '" + s.getName().lastName + "', 'G', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
+					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', 'G', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
@@ -270,7 +269,7 @@ public class Database {
 		try {
 			stmt=conn.createStatement();
 			stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
-					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().firstName + "', '" + s.getName().lastName + "', 'UG', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
+					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', 'UG', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);

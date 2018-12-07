@@ -12,12 +12,12 @@ public class Assignment implements Gradeable{
 	private double curvedScore;
 	private HashMap<Student, Score> scoreList;
 	
-	public Assignment(String name, String category, double weight, double maxScore){
+	public Assignment(String name, String category, double weight, double maxScore, double curvedScore){
 		this.name = name;
 		this.category = category;
 		this.weight = weight;
 		this.maxScore = maxScore;
-		this.curvedScore = 0;
+		this.curvedScore = curvedScore;
 		this.scoreList = new HashMap<>();
 	}
 	

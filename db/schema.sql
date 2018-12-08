@@ -31,7 +31,8 @@ PRIMARY KEY (courseid)
 
 CREATE TABLE Category ( 
 courseid       INT NOT NULL,
-weight      FLOAT NOT NULL,
+gweight      FLOAT NOT NULL,
+ugweight      FLOAT NOT NULL,
 categoryname   VARCHAR(20) NOT NULL,
 categoryseq   INT NOT NULL,
 PRIMARY KEY (courseid, categoryname),
@@ -41,7 +42,8 @@ FOREIGN KEY (courseid) REFERENCES Course(courseid)
 
 CREATE TABLE Assignment ( 
 courseid       INT NOT NULL,
-weight      FLOAT NOT NULL,
+gweight      FLOAT NOT NULL,
+ugweight      FLOAT NOT NULL,
 assignmentname   VARCHAR(20) NOT NULL,
 assignmentseq   INT NOT NULL,
 categoryname    VARCHAR(20) NOT NULL,

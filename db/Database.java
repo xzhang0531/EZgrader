@@ -78,19 +78,19 @@ public class Database {
 				lastid = rs.getInt("id");
 			}
 			String courseid = Integer.toString(lastid);
-			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
-					+ "VALUES (" + courseid + ", 0.4, 'Assignment', 0)");
-			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
-					+ "VALUES (" + courseid + ", 0.6, 'Exam', 1)");
+			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", 0.4, 0.4, 'Assignment', 0)");
+			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", 0.6, 0.6, 'Exam', 1)");
 			
 			//fake assignment data
 			
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.2, 'Assignment1', 0, 'Assignment', 100.0, 2.0)");
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.2, 'Assignment2', 1, 'Assignment', 100.0, 0)");
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.6, 'Final', 2, 'Exam', 100.0, 0)");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.2, 0.2, 'Assignment1', 0, 'Assignment', 100.0, 2.0)");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.2, 0.2, 'Assignment2', 1, 'Assignment', 100.0, 0)");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.6, 0.6, 'Final', 2, 'Exam', 100.0, 0)");
 			//fake score data
 			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U77094012', " + courseid + ", 'Assignment1', 21.0)");
@@ -177,10 +177,12 @@ public class Database {
 			ResultSet rs3=stmt3.executeQuery("select * from Category");
 			while(rs3.next()) {
 				int courseid = rs3.getInt(1);
-				String categoryname = rs3.getString(3);
-				int categoryseq = rs3.getInt(4);
-				double weight = rs3.getDouble(2);
-				Category newCategory = new Category(categoryname, categoryseq, weight);
+				double gweight = rs3.getDouble(2);
+				double ugweight = rs3.getDouble(3);
+				String categoryname = rs3.getString(4);
+				int categoryseq = rs3.getInt(5);
+				
+				Category newCategory = new Category(categoryname, categoryseq, gweight, ugweight);
 				for(Course course: courseList) {
 					if(course.getCourseId() == courseid) course.addCategory(newCategory);
 				}	
@@ -191,13 +193,14 @@ public class Database {
 			ResultSet rs4=stmt4.executeQuery("select * from Assignment");
 			while(rs4.next()) {
 				int courseid = rs4.getInt(1);
-				double weight = rs4.getDouble(2);
-				String assignmentname = rs4.getString(3);
-				int assignmentseq = rs4.getInt(4);
-				String categoryname = rs4.getString(5);
-				double maxraw = rs4.getDouble(6);
-				double curve = rs4.getDouble(7);
-				Assignment newAssign = new Assignment(assignmentname, categoryname, weight, maxraw, curve);
+				double gweight = rs4.getDouble(2);
+				double ugweight = rs4.getDouble(3);
+				String assignmentname = rs4.getString(4);
+				int assignmentseq = rs4.getInt(5);
+				String categoryname = rs4.getString(6);
+				double maxraw = rs4.getDouble(7);
+				double curve = rs4.getDouble(8);
+				Assignment newAssign = new Assignment(assignmentname, categoryname, gweight, ugweight, maxraw, curve);
 				newAssign.setAssignmentSeq(assignmentseq);
 				for(Course course: courseList) {
 					if(course.getCourseId() == courseid) {
@@ -339,8 +342,8 @@ public class Database {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
-					+ "VALUES (" + courseid + ", " + c.getWeight() + ", '" + c.getCategoryName() + "', " + c.getCategorySeq() + ")");
+			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", " + c.getGWeight() + ", " + c.getUgWeight() + ", '" + c.getCategoryName() + "', " + c.getCategorySeq() + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
@@ -359,8 +362,8 @@ public class Database {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
-					+ "VALUES (" + courseid + ", " + a.getWeight() + ", '" + a.getAssignmentName() + "', " + a.getAssignmentSeq() + ", '" + categoryname + "', " + a.getMaxScore() + ", " + a.getCurvedScore() + ")");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", " + a.getGWeight() + ", " + a.getUgWeight() + ", '" + a.getAssignmentName() + "', " + a.getAssignmentSeq() + ", '" + categoryname + "', " + a.getMaxScore() + ", " + a.getCurvedScore() + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);

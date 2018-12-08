@@ -11,6 +11,7 @@ public class Graduate extends Student {
 		this.major = major;
 		this.college = college;
 		this.gpa = gpa;
+		this.type = "G";
 		this.coursesList = new ArrayList<>();
 	}
 	
@@ -20,6 +21,7 @@ public class Graduate extends Student {
 		this.major = major;
 		this.college = college;
 		this.gpa = gpa;
+		this.type = "G";
 		this.coursesList = new ArrayList<>();
 		this.undergraduateMajor = undergraduateMajor; 
 		this.specialization = specialization;

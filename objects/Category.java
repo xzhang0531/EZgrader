@@ -6,13 +6,15 @@ import java.util.List;
 public class Category implements Comparable<Category>{
 	private String categoryName;
 	private int categorySeq;
-	private double weight;
+	private double gWeight;
+	private double ugWeight;
 	private List<Assignment> assignmentList;
 	
-	public Category(String categoryName, int categorySeq, double weight) {
+	public Category(String categoryName, int categorySeq, double gWeight, double ugWeight) {
 		this.categoryName = categoryName;
 		this.categorySeq = categorySeq;
-		this.weight = weight;
+		this.gWeight = gWeight;
+		this.ugWeight = ugWeight;
 		this.assignmentList = new ArrayList<>();
 	}
 	
@@ -32,12 +34,20 @@ public class Category implements Comparable<Category>{
 		this.categorySeq = seq;
 	}
 	
-	public double getWeight() {
-		return this.weight;
+	public double getGWeight() {
+		return this.gWeight;
 	}
 	
-	public void setWeight(double weight) {
-		this.weight = weight;
+	public void setGWeight(double weight) {
+		this.gWeight = weight;
+	}
+	
+	public double getUgWeight() {
+		return this.ugWeight;
+	}
+	
+	public void setUgWeight(double weight) {
+		this.ugWeight = weight;
 	}
 	
 	public List<Assignment> getAssignmentList() {
@@ -56,11 +66,13 @@ public class Category implements Comparable<Category>{
 	}
 	
 	public boolean weightEqualsCategoryWeight(){
-		double sumOfWeights = 0;
+		double sumOfGWeights = 0;
+		double sumOfUgWeights = 0;
 		for(Assignment assignment: this.assignmentList) {
-			sumOfWeights += assignment.getWeight();
+			sumOfGWeights += assignment.getGWeight();
+			sumOfUgWeights += assignment.getUgWeight();
 		}
-		if(sumOfWeights == this.weight) {
+		if(sumOfGWeights == this.gWeight && sumOfUgWeights == this.ugWeight) {
 			return true;
 		}
 		else{

@@ -8,18 +8,20 @@ public abstract class Student {
 	protected String major;
 	protected String college;
 	protected Double gpa;
+	protected String type;
 	protected List<Course> coursesList;
 
 	public Student() {
 
 	}
 
-	public Student(StudentName name, String buid, String major, String college, double gpa){
+	public Student(StudentName name, String buid, String major, String college, double gpa, String type){
 		this.name = name;
 		this.buid = buid;
 		this.major = major;
 		this.college = college;
 		this.gpa = gpa;
+		this.type = type;
 		this.coursesList = new ArrayList<>();
 	}
 
@@ -62,7 +64,15 @@ public abstract class Student {
 	public void setGpa(double gpa){
 		this.gpa = gpa;
 	}
+	
+	public String getType(){
+		return this.type;
+	}
 
+	public void setType(String type){
+		this.type = type;
+	}
+	
 	public boolean addCourse(Course course){
 		return this.coursesList.add(course);
 	}

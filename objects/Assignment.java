@@ -7,14 +7,16 @@ public class Assignment implements Gradeable, Comparable<Assignment>{
 	
 	private String assignmentName;
 	private int assignmentSeq;
-	private double weight;
+	private double gWeight;
+	private double ugWeight;
 	private double maxScore;
 	private double curvedScore;
 	private HashMap<Student, Score> scoreList;
 	
-	public Assignment(String name, String category, double weight, double maxScore, double curvedScore){
+	public Assignment(String name, String category, double gWeight, double ugWeight, double maxScore, double curvedScore){
 		this.assignmentName = name;
-		this.weight = weight;
+		this.gWeight = gWeight;
+		this.ugWeight = ugWeight;
 		this.maxScore = maxScore;
 		this.curvedScore = curvedScore;
 		this.scoreList = new HashMap<>();
@@ -37,12 +39,20 @@ public class Assignment implements Gradeable, Comparable<Assignment>{
 	}
 	
 	
-	public double getWeight() {
-		return this.weight;
+	public double getGWeight() {
+		return this.gWeight;
 	}
 	
-	public void setWeight(double weight) {
-		this.weight = weight;
+	public void setGWeight(double weight) {
+		this.gWeight = weight;
+	}
+	
+	public double getUgWeight() {
+		return this.ugWeight;
+	}
+	
+	public void setUgWeight(double weight) {
+		this.ugWeight = weight;
 	}
 	
 	public double getMaxScore() {

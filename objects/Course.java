@@ -81,11 +81,13 @@ public class Course implements Gradeable{
 	}
 	 
 	public boolean weightEqualsOne(){
-		double sumOfWeights = 0;
+		double sumOfGWeights = 0;
+		double sumOfUgWeights = 0;
 		for(Category category: this.categoryList) {
-			sumOfWeights += category.getWeight();
+			sumOfGWeights += category.getGWeight();
+			sumOfUgWeights += category.getUgWeight();
 		}
-		if(sumOfWeights == 1.0) {
+		if(sumOfGWeights == 1.0 && sumOfUgWeights == 1.0) {
 			return true;
 		}
 		else{

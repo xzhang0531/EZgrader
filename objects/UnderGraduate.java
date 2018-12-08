@@ -9,6 +9,7 @@ public class UnderGraduate extends Student {
 		this.major = major;
 		this.college = college;
 		this.gpa = gpa;
+		this.type = "UG";
 		this.coursesList = new ArrayList<>();
 		this.year = year;
 	}
@@ -19,6 +20,7 @@ public class UnderGraduate extends Student {
 		this.major = major;
 		this.college = college;
 		this.gpa = gpa;
+		this.type = "UG";
 		this.coursesList = new ArrayList<>();
 	}
 

@@ -1,15 +1,24 @@
 package gui;
 
+
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
@@ -17,6 +26,7 @@ import javax.swing.table.TableColumnModel;
 import db.Database;
 import gui.lib.ColumnGroup;
 import gui.lib.GroupableTableHeader;
+import gui.lib.TableCellListener;
 import objects.Assignment;
 import objects.Category;
 import objects.Course;
@@ -93,7 +103,7 @@ public class CourseDetail {
 			GroupableTableHeader t_header = (GroupableTableHeader)table.getTableHeader();
 			int columeNum = 1;
 			for(Category c: course.getCategoryList()) {
-				ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName(), 1);
+				ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + c.getGWeight()*100 + "%/UG:" + c.getUgWeight()*100 + "%)", 1);
 				for(Assignment a: c.getAssignmentList()) {
 					ColumnGroup assignmentGroup = new ColumnGroup(a.getAssignmentName(), 2);
 					assignmentGroup.add(cm.getColumn(columeNum));
@@ -104,7 +114,14 @@ public class CourseDetail {
 				}
 				t_header.addColumnGroup(categoryGroup);
 			}
+			//change colume width and alignment
 			cm.getColumn(0).setPreferredWidth(150);
+			DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+			rightRenderer.setHorizontalAlignment( JLabel.RIGHT );
+			for (int i = 1; i < table.getColumnCount(); i++) {
+				cm.getColumn(i).setPreferredWidth(100);
+				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
+			}
 			//add table to panel
 			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -121,7 +138,26 @@ public class CourseDetail {
 	        JButton btn_printStat = new JButton("Print Statistics");
 	        btn_printStat.setBounds(500, 700, 150, 30);
 	        currentCoursePanel.add(btn_printStat);
-			
+			//table listener
+	        Action action = new AbstractAction()
+	        {
+	            public void actionPerformed(ActionEvent e)
+	            {
+	                TableCellListener tcl = (TableCellListener)e.getSource();
+	                int row = tcl.getRow();
+	                int column = tcl.getColumn();
+	                double oldval = Double.parseDouble((String) tcl.getOldValue());
+	                try {
+		                double newval = Double.parseDouble((String) tcl.getNewValue());
+	                }catch(Exception err) {
+	                	JOptionPane.showMessageDialog(frame, "Invalid value");
+	                	return;
+	                }
+	                
+	                
+	            }
+	        };
+	        TableCellListener tcl = new TableCellListener(table, action);
 			
 		}
 	}

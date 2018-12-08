@@ -11,6 +11,7 @@ import objects.Student;
 import objects.StudentName;
 import objects.UnderGraduate;
 import objects.Assignment;
+import objects.Category;
 import objects.Course;
 import objects.CourseName;
 import objects.Graduate;
@@ -43,6 +44,7 @@ public class Database {
 			stmt.executeUpdate("delete from Enrollment");
 			stmt.executeUpdate("delete from AssignmentScore");
 			stmt.executeUpdate("delete from Assignment");
+			stmt.executeUpdate("delete from Category");
 			stmt.executeUpdate("delete from Course");
 			stmt.executeUpdate("delete from Student");
 			conn.commit();
@@ -69,31 +71,38 @@ public class Database {
 			//fake course data
 			stmt.executeUpdate("INSERT INTO Course (coursecode, coursename, semester, year, collegecode, section) "
 					+ "VALUES ('CS591', 'OOD', 'Fall', 2019, 'CAS', 'A1')");
-			//fake assignment data
+			//fake category data
 			ResultSet rs = stmt.executeQuery("SELECT MAX(courseid) AS id FROM Course");
 			int lastid = 0;
 			if(rs.next()) {
 				lastid = rs.getInt("id");
 			}
 			String courseid = Integer.toString(lastid);
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, componentname, category, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.2, 'Assignment1', 'Assignment', 100.0, 2.0)");
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, componentname, category, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.2, 'Assignment2', 'Assignment', 100.0, 0)");
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, componentname, category, maxraw, curve) "
-					+ "VALUES (" + courseid + ", 0.6, 'Final', 'Exam', 100.0, 0)");
+			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", 0.4, 'Assignment', 0)");
+			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", 0.6, 'Exam', 1)");
+			
+			//fake assignment data
+			
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.2, 'Assignment1', 0, 'Assignment', 100.0, 2.0)");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.2, 'Assignment2', 1, 'Assignment', 100.0, 0)");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", 0.6, 'Final', 2, 'Exam', 100.0, 0)");
 			//fake score data
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U77094012', " + courseid + ", 'Assignment1', 21.0)");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U77094012', " + courseid + ", 'Assignment2', 17.0)");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U77094012', " + courseid + ", 'Final', 9.0)");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U12344456', " + courseid + ", 'Assignment1', 23.0)");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U12344456', " + courseid + ", 'Assignment2', 16.0)");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost) "
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U12344456', " + courseid + ", 'Final', 8.0)");
 			//fake enrollment data
 			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
@@ -122,6 +131,7 @@ public class Database {
 		Statement stmt3 = null;
 		Statement stmt4 = null;
 		Statement stmt5 = null;
+		Statement stmt6 = null;
 		try{
 			//Add students to list
 			stmt=conn.createStatement();
@@ -162,49 +172,75 @@ public class Database {
 				Course newCourse = new Course(courseid, coursename, coursecode, section, semester, year, collegecode);
 				courseList.add(newCourse);
 			}
-			//Add assignments to list
+			//Add category to list
 			stmt3=conn.createStatement();
-			ResultSet rs3=stmt3.executeQuery("select * from Assignment");
+			ResultSet rs3=stmt3.executeQuery("select * from Category");
 			while(rs3.next()) {
 				int courseid = rs3.getInt(1);
+				String categoryname = rs3.getString(3);
+				int categoryseq = rs3.getInt(4);
 				double weight = rs3.getDouble(2);
-				String componentname = rs3.getString(3);
-				String category = rs3.getString(4);
-				double maxraw = rs3.getDouble(5);
-				double curve = rs3.getDouble(6);
-				Assignment newAssign = new Assignment(componentname, category, weight, maxraw, curve);
+				Category newCategory = new Category(categoryname, categoryseq, weight);
 				for(Course course: courseList) {
-					if(course.getCourseId() == courseid) course.addAssignment(newAssign);
+					if(course.getCourseId() == courseid) course.addCategory(newCategory);
 				}	
 			}
-			//Add scores to list
+
+			//Add assignments to list
 			stmt4=conn.createStatement();
-			ResultSet rs4=stmt4.executeQuery("select * from AssignmentScore");
+			ResultSet rs4=stmt4.executeQuery("select * from Assignment");
 			while(rs4.next()) {
-				String buid = rs4.getString(1);
-				int courseid = rs4.getInt(2);
-				String componentname = rs4.getString(3);
-				double pointslost = rs4.getDouble(4);
-				String comment = rs4.getString(5);
+				int courseid = rs4.getInt(1);
+				double weight = rs4.getDouble(2);
+				String assignmentname = rs4.getString(3);
+				int assignmentseq = rs4.getInt(4);
+				String categoryname = rs4.getString(5);
+				double maxraw = rs4.getDouble(6);
+				double curve = rs4.getDouble(7);
+				Assignment newAssign = new Assignment(assignmentname, categoryname, weight, maxraw, curve);
+				newAssign.setAssignmentSeq(assignmentseq);
+				for(Course course: courseList) {
+					if(course.getCourseId() == courseid) {
+						for(Category category:course.getCategoryList()) {
+							if(category.getCategoryName().equals(categoryname)) {
+								category.addAssignment(newAssign);
+							}
+						}
+					}
+				}	
+			}
+
+			//Add scores to list
+			stmt5=conn.createStatement();
+			ResultSet rs5=stmt5.executeQuery("select * from AssignmentScore");
+			while(rs5.next()) {
+				String buid = rs5.getString(1);
+				int courseid = rs5.getInt(2);
+				String assignmentname = rs5.getString(3);
+				double pointslost = rs5.getDouble(4);
+				String comment = rs5.getString(5);
 				
 				Score newScore = new Score(pointslost, comment);
 				for(Course course: courseList) {
 					if(course.getCourseId() == courseid) {
-						for(Assignment assignment:course.getAssignmentList()) {
-							if(assignment.getName().equals(componentname)) {
-								assignment.getScoreList().put(getStudentById(buid), newScore);
+						for(Category category: course.getCategoryList()) {
+							for(Assignment assignment:category.getAssignmentList()) {
+								if(assignment.getAssignmentName().equals(assignmentname)) {
+									newScore.setPercentage(newScore.calculatePercentage(assignment.getMaxScore()));
+									assignment.getScoreList().put(getStudentById(buid), newScore);
+								}
 							}
 						}
 					}
 				}	
 			}
 			//Add enrollment to list
-			stmt5=conn.createStatement();
-			ResultSet rs5=stmt5.executeQuery("select * from Enrollment");
-			while(rs5.next()) {
-				String buid = rs5.getString(1);
-				int courseid = rs5.getInt(2);
-				double rawtotal = rs5.getDouble(3);
+			stmt6=conn.createStatement();
+			ResultSet rs6=stmt6.executeQuery("select * from Enrollment");
+			while(rs6.next()) {
+				String buid = rs6.getString(1);
+				int courseid = rs6.getInt(2);
+				double rawtotal = rs6.getDouble(3);
 				for(Student student: this.studentList) {
 					if(student.getBuid().equals(buid)) {
 						student.addCourse(getCourseById(courseid));
@@ -217,6 +253,8 @@ public class Database {
 				}
 				
 			} 
+
+			
 		}catch(Exception e){
 			System.out.println(e);
 		}finally {
@@ -225,6 +263,7 @@ public class Database {
 			if (stmt3 != null) stmt3.close();
 			if (stmt4 != null) stmt4.close();
 			if (stmt5 != null) stmt5.close();
+			if (stmt6 != null) stmt6.close();
 		}
 			  
 	}
@@ -279,7 +318,7 @@ public class Database {
 		}
 	}
 	
-	//add a course to database, with out assignments
+	//add a course to database, without category
 	public boolean AddCourse(Course c) throws SQLException {
 		Statement stmt = null;
 		try {
@@ -295,13 +334,13 @@ public class Database {
 		}
 	}
 	
-	//add a assignment to database, must provide the courseid to indicate which course it belongs to.
-	public boolean AddAssignment(Assignment a, int courseid) throws SQLException {
+	//add a category to database, must provide the courseid to indicate which course it belongs to.
+	public boolean AddCategory(Category c, int courseid) throws SQLException {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, componentname, category, maxraw, curve) "
-					+ "VALUES (" + courseid + ", " + a.getWeight() + ", '" + a.getName() + "', '" + a.getCategory() + "', " + a.getMaxScore() + ", " + a.getCurvedScore() + ")");
+			stmt.executeUpdate("INSERT INTO Category (courseid, weight, categoryname, categoryseq) "
+					+ "VALUES (" + courseid + ", " + c.getWeight() + ", '" + c.getCategoryName() + "', " + c.getCategorySeq() + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
@@ -311,13 +350,33 @@ public class Database {
 		}
 	}
 	
-	//add a score to database, must provide the buid to specify which student, and courseid to specify which course, and componentname to specify which assignment.
-	public boolean AddScore(Score s, String buid, int courseid, String componentname) throws SQLException {
+	
+	
+	
+	
+	//add an assignment to database, must provide the courseid and categoryname to indicate which course it belongs to and which category it belongs to.
+	public boolean AddAssignment(Assignment a, int courseid, String categoryname) throws SQLException {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, componentname, pointslost, comment) "
-					+ "VALUES ('" + buid + "', " + courseid + ", '" + componentname + "', " + s.getPointsLost() + ", '" + s.getComment() + "')");
+			stmt.executeUpdate("INSERT INTO Assignment (courseid, weight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (" + courseid + ", " + a.getWeight() + ", '" + a.getAssignmentName() + "', " + a.getAssignmentSeq() + ", '" + categoryname + "', " + a.getMaxScore() + ", " + a.getCurvedScore() + ")");
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+	}
+	
+	//add a score to database, must provide the buid to specify which student, and courseid to specify which course, and assignmentname to specify which assignment.
+	public boolean AddScore(Score s, String buid, int courseid, String assignmentname) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost, comment) "
+					+ "VALUES ('" + buid + "', " + courseid + ", '" + assignmentname + "', " + s.getPointsLost() + ", '" + s.getComment() + "')");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);

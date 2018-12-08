@@ -14,10 +14,6 @@ specialization VARCHAR(40),
 stu_type         VARCHAR(10) NOT NULL,
 stu_year        CHAR(4),
 undergardmajor    VARCHAR(30),
-		 	 	 		
-			
-				
-					
 PRIMARY KEY (buid)
 );
 
@@ -33,28 +29,40 @@ section  VARCHAR(2),
 PRIMARY KEY (courseid)
 );
 
+CREATE TABLE Category ( 
+courseid       INT NOT NULL,
+weight      FLOAT NOT NULL,
+categoryname   VARCHAR(20) NOT NULL,
+categoryseq   INT NOT NULL,
+PRIMARY KEY (courseid, categoryname),
+FOREIGN KEY (courseid) REFERENCES Course(courseid)
+);
+
 
 CREATE TABLE Assignment ( 
 courseid       INT NOT NULL,
 weight      FLOAT NOT NULL,
-componentname   VARCHAR(20) NOT NULL,
-category    VARCHAR(20) NOT NULL,
+assignmentname   VARCHAR(20) NOT NULL,
+assignmentseq   INT NOT NULL,
+categoryname    VARCHAR(20) NOT NULL,
 maxraw      FLOAT,
 curve      FLOAT,
-PRIMARY KEY (courseid, componentname),
-FOREIGN KEY (courseid) REFERENCES Course(courseid)
+PRIMARY KEY (courseid, assignmentname),
+FOREIGN KEY (courseid) REFERENCES Course(courseid),
+FOREIGN KEY (courseid, categoryname) REFERENCES Category(courseid, categoryname)
 );
 
 
 CREATE TABLE AssignmentScore ( 
 buid       CHAR(10) NOT NULL,
 courseid       INT NOT NULL,
-componentname   VARCHAR(20) NOT NULL,
+assignmentname   VARCHAR(20) NOT NULL,
 pointslost      FLOAT,
 comment     VARCHAR(500),
-PRIMARY KEY (buid,courseid, componentname),
+PRIMARY KEY (buid,courseid, assignmentname),
 FOREIGN KEY (buid) REFERENCES Student(buid),
-FOREIGN KEY (courseid) REFERENCES Course(courseid)
+FOREIGN KEY (courseid) REFERENCES Course(courseid),
+FOREIGN KEY (courseid, assignmentname) REFERENCES Assignment(courseid, assignmentname)
 );
 
 

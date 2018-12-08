@@ -3,42 +3,42 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Assignment implements Gradeable{
+public class Assignment implements Gradeable, Comparable<Assignment>{
 	
-	private String name;
-	private String category;
+	private String assignmentName;
+	private int assignmentSeq;
 	private double weight;
 	private double maxScore;
 	private double curvedScore;
 	private HashMap<Student, Score> scoreList;
 	
 	public Assignment(String name, String category, double weight, double maxScore, double curvedScore){
-		this.name = name;
-		this.category = category;
+		this.assignmentName = name;
 		this.weight = weight;
 		this.maxScore = maxScore;
 		this.curvedScore = curvedScore;
 		this.scoreList = new HashMap<>();
 	}
 	
-	public String getName() {
-		return name;
+	public String getAssignmentName() {
+		return this.assignmentName;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setAssignmentName(String name) {
+		this.assignmentName = name;
 	}
 	
-	public String getCategory() {
-		return category;
+	public int getAssignmentSeq() {
+		return this.assignmentSeq;
 	}
 	
-	public void setCategory(String category) {
-		this.category = category;
+	public void setAssignmentSeq(int seq) {
+		this.assignmentSeq = seq;
 	}
+	
 	
 	public double getWeight() {
-		return weight;
+		return this.weight;
 	}
 	
 	public void setWeight(double weight) {
@@ -46,7 +46,7 @@ public class Assignment implements Gradeable{
 	}
 	
 	public double getMaxScore() {
-		return maxScore;
+		return this.maxScore;
 	}
 	
 	public void setMaxScore(double maxScore) {
@@ -54,7 +54,7 @@ public class Assignment implements Gradeable{
 	}
 	
 	public double getCurvedScore() {
-		return curvedScore;
+		return this.curvedScore;
 	}
 	
 	public void setCurvedScore(double curvedScore) {
@@ -62,7 +62,7 @@ public class Assignment implements Gradeable{
 	}
 
 	public HashMap<Student, Score> getScoreList() {
-		return scoreList;
+		return this.scoreList;
 	}
 	
 	public void setScoreList(HashMap<Student, Score> scoreList) {
@@ -105,6 +105,13 @@ public class Assignment implements Gradeable{
 		} else {
 			return scores[scores.length/2];
 		}
+	}
+
+
+
+	@Override
+	public int compareTo(Assignment compareAssignment) {
+		return this.getAssignmentSeq() - compareAssignment.assignmentSeq;
 	}
 	
 }

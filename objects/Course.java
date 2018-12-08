@@ -10,18 +10,13 @@ public class Course implements Gradeable{
 	private int courseid;
 	private CourseName courseName;
 	private List<Student> studentList;
-	private List<Assignment> assignmentList;
+	private List<Category> categoryList;
 	private Map<Student, Double> finalScoreList;
 
-	public Course() {
-		this.studentList =  new ArrayList();
-		this.assignmentList = new ArrayList();
-		this.finalScoreList = new HashMap<>();
-	}
 	
 	public Course(String name, String code, String section, String semester, String year, String college) {
 		this.studentList =  new ArrayList();
-		this.assignmentList = new ArrayList();
+		this.categoryList = new ArrayList();
 		this.finalScoreList = new HashMap<>();
 		this.courseName = new CourseName(name, code, section, semester, year, college);
 	}
@@ -29,7 +24,7 @@ public class Course implements Gradeable{
 	public Course(int cid, String name, String code, String section, String semester, String year, String college) {
 		this.courseid = cid;
 		this.studentList =  new ArrayList();
-		this.assignmentList = new ArrayList();
+		this.categoryList = new ArrayList();
 		this.finalScoreList = new HashMap<>();
 		this.courseName = new CourseName(name, code, section, semester, year, college);
 	}
@@ -58,12 +53,12 @@ public class Course implements Gradeable{
 		this.studentList = studentList;
 	}
 	
-	public List<Assignment> getAssignmentList() {
-		return this.assignmentList;
+	public List<Category> getCategoryList() {
+		return this.categoryList;
 	}
 
-	public void setAssignmentList(List<Assignment> assignmentList) {
-		this.assignmentList = assignmentList;
+	public void setCategoryList(List<Category> categoryList) {
+		this.categoryList = categoryList;
 	}
 	
 	public Map<Student, Double> getFinalScoreList() {
@@ -78,17 +73,17 @@ public class Course implements Gradeable{
 		return this.studentList.remove(s);
 	}
 	 
-	public boolean addAssignment(Assignment assignment) {
-		return this.assignmentList.add(assignment);
+	public boolean addCategory(Category category) {
+		return this.categoryList.add(category);
 	}
-	public boolean deleteAssignment(Assignment assignment) {
-		return this.assignmentList.remove(assignment);
+	public boolean deleteCategory(Category category) {
+		return this.categoryList.remove(category);
 	}
 	 
 	public boolean weightEqualsOne(){
 		double sumOfWeights = 0;
-		for(Assignment assignment: this.assignmentList) {
-			sumOfWeights += assignment.getWeight();
+		for(Category category: this.categoryList) {
+			sumOfWeights += category.getWeight();
 		}
 		if(sumOfWeights == 1.0) {
 			return true;
@@ -97,56 +92,8 @@ public class Course implements Gradeable{
 			return false;
 		}
 	} 
-	
-	public boolean calculateFinalScore() {
+		
 
-		for(Student student : studentList) {
-			double finalGrade = 0.0;
-			for(Assignment assignment:  assignmentList) {
-				double currentStudentRawScore = student.getAssignmentScore(assignment).calculateScore(assignment.getMaxScore());
-				double currentStudentCurvedScore = currentStudentRawScore+assignment.getCurvedScore();
-				if(currentStudentCurvedScore > assignment.getMaxScore()) {
-					currentStudentCurvedScore = assignment.getMaxScore();
-				}
-				finalGrade += (currentStudentCurvedScore * assignment.getWeight());
-			}
-			
-			this.finalScoreList.put(student, finalGrade);
-		}
-		return true;
-		
-	}
-	
-	public boolean curve(Assignment assignment , double value) {
-		
-		assignment.setCurvedScore(value);
-		return true;
-	}
-	
-	public boolean changeWeight(Assignment assignment, double newWeight) {
-		
-		assignment.setWeight(newWeight);
-		return true;
-		
-	}
-	
-	public boolean changeWeight(String category, double newWeight) {
-		double numberOfCategories = 0;
-		for(Assignment assignment : assignmentList) {
-			if(assignment.getCategory().equals(category)) {
-				numberOfCategories++;
-			}
-		}
-		double newCategoryWeight = newWeight/numberOfCategories;
-		for(Assignment assignments : assignmentList) {
-			if(assignments.getCategory().equals(category)) {
-				assignments.setWeight(newCategoryWeight);
-			}
-		}
-		return true;
-		
-	}
-	
 	public double getMax() {
 		double max = Integer.MIN_VALUE;
 		for (Map.Entry<Student, Double> studentFinalScores : finalScoreList.entrySet()) {

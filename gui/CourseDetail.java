@@ -57,6 +57,7 @@ public class CourseDetail {
 				Collections.sort(c.getAssignmentList());
 			}
 			//add table header
+			header.add("BUID");
 			header.add("Name");
 			for(Category c: course.getCategoryList()) {
 				for(Assignment a: c.getAssignmentList()) {
@@ -68,6 +69,7 @@ public class CourseDetail {
 			//add table data
 			for(Student s: course.getStudentList()) {
 				List<String> rowdata = new ArrayList<>();
+				rowdata.add(s.getBuid());
 				rowdata.add(s.getName().getFullName());
 				for(Category c: course.getCategoryList()) {
 					for(Assignment a: c.getAssignmentList()) {
@@ -85,7 +87,7 @@ public class CourseDetail {
 
 			//create table
 			Object[] tableHeader = new Object[header.size()];
-			for (int i =0; i < header.size(); i++) tableHeader[i] = header.get(i);
+			for (int i = 0; i < header.size(); i++) tableHeader[i] = header.get(i);
 			Object[][] tableData = new Object[data.size()][data.size() == 0?0:data.get(0).size()];
 			for (int i = 0; i < data.size(); i++) {
 				for (int j = 0; j < data.get(i).size(); j++) {
@@ -101,7 +103,7 @@ public class CourseDetail {
 			//set group
 			TableColumnModel cm = table.getColumnModel();
 			GroupableTableHeader t_header = (GroupableTableHeader)table.getTableHeader();
-			int columeNum = 1;
+			int columeNum = 2;
 			for(Category c: course.getCategoryList()) {
 				ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + c.getGWeight()*100 + "%/UG:" + c.getUgWeight()*100 + "%)", 1);
 				for(Assignment a: c.getAssignmentList()) {
@@ -115,10 +117,11 @@ public class CourseDetail {
 				t_header.addColumnGroup(categoryGroup);
 			}
 			//change colume width and alignment
-			cm.getColumn(0).setPreferredWidth(150);
+			cm.getColumn(0).setPreferredWidth(100);
+			cm.getColumn(1).setPreferredWidth(150);
 			DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 			rightRenderer.setHorizontalAlignment( JLabel.RIGHT );
-			for (int i = 1; i < table.getColumnCount(); i++) {
+			for (int i = 2; i < table.getColumnCount(); i++) {
 				cm.getColumn(i).setPreferredWidth(100);
 				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
 			}
@@ -146,15 +149,29 @@ public class CourseDetail {
 	                TableCellListener tcl = (TableCellListener)e.getSource();
 	                int row = tcl.getRow();
 	                int column = tcl.getColumn();
-	                double oldval = Double.parseDouble((String) tcl.getOldValue());
-	                try {
-		                double newval = Double.parseDouble((String) tcl.getNewValue());
-	                }catch(Exception err) {
-	                	JOptionPane.showMessageDialog(frame, "Invalid value");
+	                
+	                String oldVal = (String) tcl.getOldValue();
+	                String newVal;
+	                System.out.println(column);
+	                if(column == 0 || column == 1 || column % 2 == 1 || column == table.getColumnCount() - 1) {
+	                	JOptionPane.showMessageDialog(frame, "This cell cannot be changed!");
+	                	dm.setValueAt(oldVal, row, column);
 	                	return;
 	                }
 	                
+	                try {
+		                newVal = (String) tcl.getNewValue();
+		                Double.parseDouble(newVal);
+	                }catch(Exception err) {
+	                	JOptionPane.showMessageDialog(frame, "Invalid value");
+	                	dm.setValueAt(oldVal, row, column);
+	                	return;
+	                }
 	                
+	                String buid = (String) dm.getValueAt(row, 0);
+	                int courseid = course.getCourseId();
+	                
+
 	            }
 	        };
 	        TableCellListener tcl = new TableCellListener(table, action);

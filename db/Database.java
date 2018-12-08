@@ -404,4 +404,61 @@ public class Database {
 			if (stmt != null) stmt.close();
 		}
 	}
+	
+	
+	public boolean AddEverythingByCourse(Course c) throws SQLException {
+		Statement stmt = null;
+		try {
+			conn.setAutoCommit(false);
+			//add course
+			AddCourse(c);
+			stmt=conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT MAX(courseid) AS id FROM Course");
+			int lastid = 0;
+			if(rs.next()) {
+				lastid = rs.getInt("id");
+			}
+			c.setCourseId(lastid);
+			//add student
+			for(Student s: c.getStudentList()) {
+				if(s.getType().equals("G")) {
+					AddGraduateStudent(s);
+				}else {
+					AddUnderGraduateStudent(s);
+				}
+			}
+			//add category
+			for(Category ca: c.getCategoryList()) {
+				AddCategory(ca, c.getCourseId());
+			}
+			//add assignment
+			for(Category ca: c.getCategoryList()) {
+				for(Assignment a: ca.getAssignmentList()) {
+					AddAssignment(a, c.getCourseId(), ca.getCategoryName());
+				}
+			}
+			//add score
+			for(Category ca: c.getCategoryList()) {
+				for(Assignment a: ca.getAssignmentList()) {
+					for(Student s: a.getScoreList().keySet()) {
+						AddScore(a.getScoreList().get(s), s.getBuid(), c.getCourseId(), a.getAssignmentName());
+					}
+				}
+			}
+			//add enrollment
+			for(Student s: c.getStudentList()) {
+				AddEnrollment(s.getBuid(), c.getCourseId());
+			}
+
+			conn.commit();
+			return true;
+		}catch(Exception e) {
+			conn.rollback();
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+			conn.setAutoCommit(true);
+		}
+	}
 }

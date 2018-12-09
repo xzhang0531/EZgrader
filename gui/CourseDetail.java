@@ -74,6 +74,26 @@ public class CourseDetail {
 			
 			JButton btn_calFinal = new JButton("Calculate Final");
 			btn_calFinal.setBounds(300, 20, 150, 30);
+			btn_calFinal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						db.updateDB();
+						Course newestCourse;
+						for(Course c: db.courseList) {
+							if(c.getCourseId() == course.getCourseId()) {
+								newestCourse = c;
+								newestCourse.calculateFinalScore();
+								
+							}
+						}
+						
+						
+						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
 			currentCoursePanel.add(btn_calFinal);
 			
 			JButton btn_printStat = new JButton("Print Statistics");

@@ -149,6 +149,27 @@ public class Course implements Gradeable{
 		}
 		return null;
 	}
+	
+	
+	public void calculateFinalScore() {
+		for(Student s: studentList) {
+			String stuType = s.getType();
+			double finalScore = 0;
+			for(Course c:s.getCoursesList()) {
+				if(c.getCourseId() == this.courseid) {
+					for(Category ca: c.getCategoryList()) {
+						double weight1 = stuType.equals("UG")?ca.getUgWeight():ca.getGWeight();
+						for(Assignment a: ca.getAssignmentList()) {
+							double weight2 = stuType.equals("UG")?a.getUgWeight():a.getGWeight();
+							double score = a.getScoreList().get(s).getPercentage();
+							finalScore += score * weight2 * weight1;
+						}
+					}
+				}
+			}
+			finalScoreList.put(s, finalScore);
+		}
+	}
 }
 
 

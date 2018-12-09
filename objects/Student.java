@@ -73,6 +73,14 @@ public abstract class Student implements Comparable<Student>{
 		this.type = type;
 	}
 	
+	public List<Course> getCoursesList(){
+		return this.coursesList;
+	}
+
+	public void setCoursesList(List<Course> coursesList){
+		this.coursesList = coursesList;
+	}
+	
 	public boolean addCourse(Course course){
 		return this.coursesList.add(course);
 	}

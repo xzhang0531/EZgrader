@@ -2,16 +2,22 @@ package gui.lib;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicTableHeaderUI;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -88,6 +94,9 @@ public class GroupableTableHeaderUI extends BasicTableHeaderUI {
                 false, -1, -1);
         rendererPane
                 .paintComponent(g, component, header, cellRect.x, cellRect.y, cellRect.width, cellRect.height, true);
+        
+        
+        
     }
 
     private int getHeaderHeight() {

@@ -378,6 +378,7 @@ public class Database {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
+			stmt.executeUpdate("DELETE FROM AssignmentScore where buid = '" + buid + "' and courseid = " +courseid + " and assignmentname = '" + assignmentname + "'");
 			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost, comment) "
 					+ "VALUES ('" + buid + "', " + courseid + ", '" + assignmentname + "', " + s.getPointsLost() + ", '" + s.getComment() + "')");
 			return true;

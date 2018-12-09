@@ -138,6 +138,17 @@ public class Course implements Gradeable{
 			return scores[scores.length/2];
 		}
 	}
+	
+	public Assignment getAssignment(String assignmentName) {
+		for(Category c: categoryList) {
+			for(Assignment a: c.getAssignmentList()) {
+				if(a.getAssignmentName().equals(assignmentName)) {
+					return a;
+				}
+			}
+		}
+		return null;
+	}
 }
 
 

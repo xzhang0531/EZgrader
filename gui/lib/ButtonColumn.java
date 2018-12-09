@@ -116,7 +116,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 				String buid = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
 				String assignmentname = "";
 				
-				int assignIdx = (table.getSelectedColumn() - 4)/3;
+				int assignIdx = (table.getSelectedColumn() - 5)/3;
 				int currIdx = 0;
 				for(Category c: course.getCategoryList()) {
 					for(Assignment a: c.getAssignmentList()) {
@@ -157,7 +157,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 		
 		d.add(p);
 		d.setLocation(400, 200);
-        d.setSize(500, 500); 
-        d.setVisible(true); 
+		d.setSize(500, 500); 
+		d.setVisible(true); 
 	}
 }

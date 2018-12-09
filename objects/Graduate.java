@@ -42,4 +42,6 @@ public class Graduate extends Student {
 	public void setSpecialization(String specialization){
 		this.specialization = specialization;
 	}
+
+	
 }

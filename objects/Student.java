@@ -2,7 +2,7 @@ package objects;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Student {
+public abstract class Student implements Comparable<Student>{
 	protected StudentName name;
 	protected String buid;
 	protected String major;
@@ -83,6 +83,18 @@ public abstract class Student {
 
 	public Score getAssignmentScore(Assignment assignment){
 		return assignment.getScoreList().get(this);
+	}
+	
+	@Override
+	public int compareTo(Student otherStudent) {
+		if (this.type.equals(otherStudent.getType())) {
+			return 0;
+		}
+		if (this.type.equals("UG")) {
+			return -1;
+		} else {
+			return 1;
+		}
 	}
 }
 

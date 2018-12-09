@@ -4,6 +4,7 @@ package gui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +60,11 @@ public class CourseDetail {
 			JButton btn_addStudent = new JButton("Add Student");
 			btn_addStudent.setBounds(100, 20, 110, 25);
 			btn_addStudent.setFont(new Font("Arial", Font.BOLD, 9));
+			btn_addStudent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+				}
+			});
 			currentCoursePanel.add(btn_addStudent);
 		
 			JButton btn_changeweight = new JButton("Change Weight");
@@ -76,7 +82,7 @@ public class CourseDetail {
 			
 			//add table to panel
 			JTable table = createTable(course, db);
-			
+			table.getTableHeader().setResizingAllowed(false);
 			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			sp.setBounds(50, 100, 1200, 600);
 			currentCoursePanel.setLayout(null);
@@ -98,6 +104,7 @@ public class CourseDetail {
 		//add table header
 		header.add("BUID");
 		header.add("Name");
+		header.add("Type");
 		for(Category c: course.getCategoryList()) {
 			for(Assignment a: c.getAssignmentList()) {
 				header.add("PointsLost");
@@ -107,10 +114,12 @@ public class CourseDetail {
 		}
 		header.add("Cumulative");
 		//add table data
+		Collections.sort(course.getStudentList());
 		for(Student s: course.getStudentList()) {
 			List<String> rowdata = new ArrayList<>();
 			rowdata.add(s.getBuid());
 			rowdata.add(s.getName().getFullName());
+			rowdata.add(s.getType());
 			for(Category c: course.getCategoryList()) {
 				for(Assignment a: c.getAssignmentList()) {
 					if(a.getScoreList().containsKey(s)) {
@@ -146,7 +155,7 @@ public class CourseDetail {
 		//set group
 		TableColumnModel cm = table.getColumnModel();
 		GroupableTableHeader t_header = (GroupableTableHeader)table.getTableHeader();
-		int columeNum = 2;
+		int columeNum = 3;
 		for(Category c: course.getCategoryList()) {
 			ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + c.getGWeight()*100 + "%/UG:" + c.getUgWeight()*100 + "%)", 1);
 			for(Assignment a: c.getAssignmentList()) {
@@ -164,10 +173,14 @@ public class CourseDetail {
 		//change colume width and alignment
 		cm.getColumn(0).setPreferredWidth(100);
 		cm.getColumn(1).setPreferredWidth(150);
+		cm.getColumn(2).setPreferredWidth(50);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		cm.getColumn(2).setCellRenderer(centerRenderer);
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment( JLabel.RIGHT );
-		for (int i = 2; i < table.getColumnCount(); i++) {
-			if(i%3 == 1) {
+		for (int i = 3; i < table.getColumnCount(); i++) {
+			if(i%3 == 2) {
 				cm.getColumn(i).setPreferredWidth(16);
 				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
 			}else {
@@ -186,7 +199,7 @@ public class CourseDetail {
 
 				String oldVal = (String) tcl.getOldValue();
 				String newVal;
-				if(column == 0 || column == 1 || column % 3 != 2 || column == table.getColumnCount() - 1) {
+				if(column == 0 || column == 1 || column == 2 || column % 3 != 0 || column == table.getColumnCount() - 1) {
 					JOptionPane.showMessageDialog(frame, "This cell cannot be changed!");
 					dm.setValueAt(oldVal, row, column);
 					return;
@@ -204,7 +217,7 @@ public class CourseDetail {
 				String buid = (String) dm.getValueAt(row, 0);
 				int courseid = course.getCourseId();
 				String assignmentname = "";
-				int assignIdx = (column - 2)/3;
+				int assignIdx = (column - 3)/3;
 				int currIdx = 0;
 				for(Category c: course.getCategoryList()) {
 					for(Assignment a: c.getAssignmentList()) {
@@ -216,9 +229,8 @@ public class CourseDetail {
 						}
 					}
 				}
-				Score s = new Score( Double.parseDouble(newVal),"");
 				try {
-					db.AddScore(s, buid, courseid, assignmentname);
+					db.updateScore(buid, courseid, assignmentname, Double.parseDouble(newVal));
 					db.updateDB();
 					Course newestCourse = db.getCourseById(courseid);
 					double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
@@ -232,15 +244,10 @@ public class CourseDetail {
 		TableCellListener tcl = new TableCellListener(table, action);
 		//comment column
 		
-		for(int i = 4; i < table.getColumnCount(); i+=3) {
+		for(int i = 5; i < table.getColumnCount(); i+=3) {
 			ButtonColumn buttonsColumn = new ButtonColumn(table, i, frame, course);
 		}
-		
-		
-		
-		
-		
-		
+
 		return table;
 	}
 	

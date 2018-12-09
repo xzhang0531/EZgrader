@@ -477,4 +477,19 @@ public class Database {
 		}
 		
 	}
+	
+	public boolean updateScore(String buid, int courseid, String assignmentname, double pointslost) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Assignmentscore SET pointslost = " + pointslost + " WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
+	}
 }

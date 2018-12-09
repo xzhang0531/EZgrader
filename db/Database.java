@@ -92,8 +92,8 @@ public class Database {
 			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
 					+ "VALUES (" + courseid + ", 0.6, 0.6, 'Final', 2, 'Exam', 100.0, 0)");
 			//fake score data
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
-					+ "VALUES ('U77094012', " + courseid + ", 'Assignment1', 21.0)");
+			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost, comment) "
+					+ "VALUES ('U77094012', " + courseid + ", 'Assignment1', 21.0, 'sick')");
 			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U77094012', " + courseid + ", 'Assignment2', 17.0)");
 			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
@@ -461,5 +461,20 @@ public class Database {
 			if (stmt != null) stmt.close();
 			conn.setAutoCommit(true);
 		}
+	}
+
+	public boolean updateComment(String buid, int courseid, String assignmentname, String comment) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Assignmentscore SET comment = '" + comment + "' WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
 	}
 }

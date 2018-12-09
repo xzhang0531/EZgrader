@@ -1,13 +1,9 @@
 package gui;
 
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +25,7 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import db.Database;
+import gui.lib.ButtonColumn;
 import gui.lib.ColumnGroup;
 import gui.lib.GroupableTableHeader;
 import gui.lib.TableCellListener;
@@ -105,6 +102,7 @@ public class CourseDetail {
 			for(Assignment a: c.getAssignmentList()) {
 				header.add("PointsLost");
 				header.add("Percentage");
+				header.add("C");
 			}
 		}
 		header.add("Cumulative");
@@ -118,7 +116,9 @@ public class CourseDetail {
 					if(a.getScoreList().containsKey(s)) {
 						rowdata.add(String.valueOf(a.getScoreList().get(s).getPointsLost()));
 						rowdata.add(String.valueOf(a.getScoreList().get(s).getPercentage()));
+						rowdata.add(String.valueOf(a.getScoreList().get(s).getComment()));
 					}else {
+						rowdata.add(null);
 						rowdata.add(null);
 						rowdata.add(null);
 					}
@@ -155,6 +155,8 @@ public class CourseDetail {
 				columeNum += 1;
 				assignmentGroup.add(cm.getColumn(columeNum));
 				columeNum += 1;
+				assignmentGroup.add(cm.getColumn(columeNum));
+				columeNum += 1;
 				categoryGroup.add(assignmentGroup);
 			}
 			t_header.addColumnGroup(categoryGroup);
@@ -165,8 +167,14 @@ public class CourseDetail {
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment( JLabel.RIGHT );
 		for (int i = 2; i < table.getColumnCount(); i++) {
-			cm.getColumn(i).setPreferredWidth(100);
-			table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
+			if(i%3 == 1) {
+				cm.getColumn(i).setPreferredWidth(16);
+				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
+			}else {
+				cm.getColumn(i).setPreferredWidth(100);
+				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
+			}
+			
 		}
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		//table listener
@@ -178,7 +186,7 @@ public class CourseDetail {
 
 				String oldVal = (String) tcl.getOldValue();
 				String newVal;
-				if(column == 0 || column == 1 || column % 2 == 1 || column == table.getColumnCount() - 1) {
+				if(column == 0 || column == 1 || column % 3 != 2 || column == table.getColumnCount() - 1) {
 					JOptionPane.showMessageDialog(frame, "This cell cannot be changed!");
 					dm.setValueAt(oldVal, row, column);
 					return;
@@ -196,9 +204,8 @@ public class CourseDetail {
 				String buid = (String) dm.getValueAt(row, 0);
 				int courseid = course.getCourseId();
 				String assignmentname = "";
-				int assignIdx = (column - 2)/2;
+				int assignIdx = (column - 2)/3;
 				int currIdx = 0;
-				System.out.println(assignIdx);
 				for(Category c: course.getCategoryList()) {
 					for(Assignment a: c.getAssignmentList()) {
 						if(currIdx == assignIdx) {
@@ -223,6 +230,17 @@ public class CourseDetail {
 			}
 		};
 		TableCellListener tcl = new TableCellListener(table, action);
+		//comment column
+		
+		for(int i = 4; i < table.getColumnCount(); i+=3) {
+			ButtonColumn buttonsColumn = new ButtonColumn(table, i, frame, course);
+		}
+		
+		
+		
+		
+		
+		
 		return table;
 	}
 	
@@ -243,7 +261,6 @@ public class CourseDetail {
 	public static void main(String[] args) {
 		CourseDetail cd = new CourseDetail();
 		cd.run();
-		
-		
+
 	}
 }

@@ -396,7 +396,7 @@ public class Database {
 		try {
 			stmt=conn.createStatement();
 			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
-					+ "VALUES ('" + buid + ", " + courseid + ")");
+					+ "VALUES ('" + buid + "', " + courseid + ")");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
@@ -467,7 +467,7 @@ public class Database {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE Assignmentscore SET comment = '" + comment + "' WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			stmt.executeUpdate("UPDATE AssignmentScore SET comment = '" + comment + "' WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
@@ -482,7 +482,45 @@ public class Database {
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE Assignmentscore SET pointslost = " + pointslost + " WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			ResultSet rs = stmt.executeQuery("SELECT * from AssignmentScore where buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			if(rs.next()) {
+				stmt.executeUpdate("UPDATE AssignmentScore SET pointslost = " + pointslost + " WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			}else {
+				stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
+						+ "VALUES ('" + buid + "', " + courseid + ", '" + assignmentname + "', " + pointslost + ")");
+				return true;
+			}
+			
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
+	}
+	
+	public boolean updateCategoryWeight(String type, int courseid, String categoryname, double newWeight) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Category SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND categoryname = '" + categoryname + "'");
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
+	}
+	
+	public boolean updateAssignmentWeight(String type, int courseid, String assignmentname, double newWeight) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Assignment SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);

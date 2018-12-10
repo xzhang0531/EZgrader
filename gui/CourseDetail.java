@@ -68,33 +68,19 @@ public class CourseDetail {
 			currentCoursePanel.add(btn_addStudent);
 		
 			JButton btn_changeweight = new JButton("Change Weight");
+			btn_changeweight.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					ChangeWeight frame2 = new ChangeWeight(course);
+					frame2.frame.setVisible(true);
+				}
+			});
 			btn_changeweight.setBounds(100, 50, 110, 25);
 			btn_changeweight.setFont(new Font("Arial", Font.BOLD, 9));
 			currentCoursePanel.add(btn_changeweight);
 			
-			JButton btn_calFinal = new JButton("Calculate Final");
-			btn_calFinal.setBounds(300, 20, 150, 30);
-			btn_calFinal.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					try {
-						db.updateDB();
-						Course newestCourse;
-						for(Course c: db.courseList) {
-							if(c.getCourseId() == course.getCourseId()) {
-								newestCourse = c;
-								newestCourse.calculateFinalScore();
-								
-							}
-						}
-						
-						
-						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			currentCoursePanel.add(btn_calFinal);
+			
+			
 			
 			JButton btn_printStat = new JButton("Print Statistics");
 			btn_printStat.setBounds(500, 20, 150, 30);
@@ -107,6 +93,36 @@ public class CourseDetail {
 			sp.setBounds(50, 100, 1200, 600);
 			currentCoursePanel.setLayout(null);
 			currentCoursePanel.add(sp);
+			//calc final
+			JButton btn_calFinal = new JButton("Calculate Final");
+			btn_calFinal.setBounds(300, 20, 150, 30);
+			btn_calFinal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						db.updateDB();
+						Course newestCourse = null;
+						for(Course c: db.courseList) {
+							if(c.getCourseId() == course.getCourseId()) {
+								newestCourse = c;
+								newestCourse.calculateFinalScore();
+							}
+						}
+						for(int i = 0; i < table.getRowCount(); i++) {
+							String buid = (String) table.getModel().getValueAt(i, 0);
+							for (Student student: newestCourse.getStudentList()) {
+								if(student.getBuid().equals(buid)) {
+									double finalScore = newestCourse.getFinalScoreList().get(student);
+									table.getModel().setValueAt(finalScore, i, table.getColumnCount()-1);
+								}
+							}
+						}
+
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			currentCoursePanel.add(btn_calFinal);
 			
 		}
 	}
@@ -219,45 +235,46 @@ public class CourseDetail {
 
 				String oldVal = (String) tcl.getOldValue();
 				String newVal;
-				if(column == 0 || column == 1 || column == 2 || column % 3 != 0 || column == table.getColumnCount() - 1) {
+				if(column == 0 || column == 1 || column == 2 || column % 3 == 1 || column == table.getColumnCount() - 1) {
 					JOptionPane.showMessageDialog(frame, "This cell cannot be changed!");
 					dm.setValueAt(oldVal, row, column);
 					return;
 				}
-
-				try {
-					newVal = (String) tcl.getNewValue();
-					Double.parseDouble(newVal);
-				}catch(Exception err) {
-					JOptionPane.showMessageDialog(frame, "Invalid value");
-					dm.setValueAt(oldVal, row, column);
-					return;
-				}
 				
-				String buid = (String) dm.getValueAt(row, 0);
-				int courseid = course.getCourseId();
-				String assignmentname = "";
-				int assignIdx = (column - 3)/3;
-				int currIdx = 0;
-				for(Category c: course.getCategoryList()) {
-					for(Assignment a: c.getAssignmentList()) {
-						if(currIdx == assignIdx) {
-							assignmentname = a.getAssignmentName();
-							currIdx += 1;
-						}else {
-							currIdx += 1;
+				if(column % 3 == 0) {
+					try {
+						newVal = (String) tcl.getNewValue();
+						Double.parseDouble(newVal);
+					}catch(Exception err) {
+						JOptionPane.showMessageDialog(frame, "Invalid value");
+						dm.setValueAt(oldVal, row, column);
+						return;
+					}
+					String buid = (String) dm.getValueAt(row, 0);
+					int courseid = course.getCourseId();
+					String assignmentname = "";
+					int assignIdx = (column - 3)/3;
+					int currIdx = 0;
+					for(Category c: course.getCategoryList()) {
+						for(Assignment a: c.getAssignmentList()) {
+							if(currIdx == assignIdx) {
+								assignmentname = a.getAssignmentName();
+								currIdx += 1;
+							}else {
+								currIdx += 1;
+							}
 						}
 					}
-				}
-				try {
-					db.updateScore(buid, courseid, assignmentname, Double.parseDouble(newVal));
-					db.updateDB();
-					Course newestCourse = db.getCourseById(courseid);
-					double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
-					dm.setValueAt(String.valueOf(newPercentage), row, column + 1);
-					
-				} catch (SQLException e1) {
-					e1.printStackTrace();
+					try {
+						db.updateScore(buid, courseid, assignmentname, Double.parseDouble(newVal));
+						db.updateDB();
+						Course newestCourse = db.getCourseById(courseid);
+						double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
+						dm.setValueAt(String.valueOf(newPercentage), row, column + 1);
+						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		};

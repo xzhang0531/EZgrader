@@ -65,7 +65,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 		if(value == null || value.equals("") || value.equals("null")) {
 			
 		} else {
-			ImageIcon imageIcon = new ImageIcon("C:/Users/xzhan/Desktop/EZgrader/gui/img/info.png");
+			ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/info.png");
 			Image image = imageIcon.getImage();
 			Image newimg = image.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -99,7 +99,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 		p.setLayout(null);
 		
 		String comment = (String) table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn());
-		comment = comment.equals("null")?"":comment;
+		if(comment != null) comment = comment.equals("null")?"":comment;
 		
 		//textarea
 		JTextArea textArea = new JTextArea(5, 20);

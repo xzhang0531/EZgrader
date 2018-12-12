@@ -530,4 +530,43 @@ public class Database {
 		}
 		
 	}
+	
+	public boolean AddSingleStudent(Student s) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * from Student where buid = '" + s.getBuid() + "'");
+			if(rs.next()) {
+				return false;
+			}else {
+				stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
+						+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', '" + s.getType() + "', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
+				return true;
+			}
+
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
+	}
+	
+	
+	public boolean updateCurve(int courseid, String assignmentname, double curve) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Assignment SET curve = " + curve + " WHERE courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
+			
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+		
+	}
 }

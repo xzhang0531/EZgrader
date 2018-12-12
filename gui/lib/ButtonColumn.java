@@ -61,7 +61,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 			renderButton.setForeground(table.getForeground());
 			renderButton.setBackground(UIManager.getColor("Button.background"));
 		}
-		System.out.println();
+
 		if(value == null || value.equals("") || value.equals("null")) {
 			
 		} else {
@@ -83,7 +83,7 @@ public class ButtonColumn extends AbstractCellEditor implements
 		JButton editButton = new JButton();
 		editButton.setFocusPainted(false);
 		editButton.addActionListener(this);
-		text = (value == null) ? " " : value.toString();
+		text = (value == null) ? "" : value.toString();
 		editButton.setText(text);
 		return editButton;
 	}

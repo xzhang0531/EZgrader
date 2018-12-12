@@ -136,9 +136,7 @@ public class CreateCourse {
 		
 
 		
-		JButton btnImportSavedSettings = new JButton("Import Saved Settings");
-		btnImportSavedSettings.setBounds(420, 354, 161, 49);
-		frame.getContentPane().add(btnImportSavedSettings);
+
 		
 		JLabel lblSemester = new JLabel("Semester :");
 		lblSemester.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
@@ -152,6 +150,25 @@ public class CreateCourse {
 		comboBox_3.setBounds(460, 281, 121, 29);
 		frame.getContentPane().add(comboBox_3);
 		
+		JButton btnImportSavedSettings = new JButton("Import Saved Settings");
+		btnImportSavedSettings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String college = comboBox.getSelectedItem().toString();
+				String year = comboBox_1.getSelectedItem().toString();
+				String code = textField_1.getText();
+				String section = comboBox_2.getSelectedItem().toString();
+				String semester = comboBox_3.getSelectedItem().toString();
+				String name = textField.getText();
+				Course newCourse = new Course(name, code, section, semester, year, college);
+				System.out.print(newCourse.getCourseName().getSection());
+				frame.dispose();
+				ImportSavedSettings frame2 = new ImportSavedSettings(newCourse);
+				frame2.frame.setVisible(true);
+			}
+		});
+		btnImportSavedSettings.setBounds(420, 354, 161, 49);
+		frame.getContentPane().add(btnImportSavedSettings);
+		
 		JButton btnNewButton = new JButton("Use New Setting");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -164,7 +181,7 @@ public class CreateCourse {
 				Course newCourse = new Course(name, code, section, semester, year, college);
 				System.out.print(newCourse.getCourseName().getSection());
 				frame.dispose();
-				editComponents frame2 = new editComponents(newCourse);
+				EditComponents frame2 = new EditComponents(newCourse);
 				frame2.frame.setVisible(true);
 			}
 		});

@@ -3,6 +3,7 @@ package gui;
 
 
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -57,15 +59,54 @@ public class CourseDetail {
 			
 			//add buttons
 			
-			JButton btn_addStudent = new JButton("Add Student");
-			btn_addStudent.setBounds(100, 20, 110, 25);
-			btn_addStudent.setFont(new Font("Arial", Font.BOLD, 9));
+			JButton btn_addStudent = new JButton();
+			ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/plus.png");
+			Image image = imageIcon.getImage();
+			Image newimg = image.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
+			imageIcon = new ImageIcon(newimg);
+			btn_addStudent.setIcon(imageIcon);
+			btn_addStudent.setBounds(80, 150, 20, 20);
+			btn_addStudent.setContentAreaFilled(false);
 			btn_addStudent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					AddSingleStudent a = new AddSingleStudent(db, course);
+					a.frame.setVisible(true);
+				}
+			});
+			currentCoursePanel.add(btn_addStudent);
+			
+			
+			JButton btn_deleteStudent = new JButton();
+			ImageIcon imageIcon2 = new ImageIcon("/home/xzhang/EZgrader/gui/img/minus.png");
+			Image image2 = imageIcon2.getImage();
+			Image newimg2 = image2.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
+			imageIcon2 = new ImageIcon(newimg2);
+			btn_deleteStudent.setIcon(imageIcon2);
+			btn_deleteStudent.setBounds(102, 150, 20, 20);
+			btn_deleteStudent.setContentAreaFilled(false);
+			btn_deleteStudent.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
 				}
 			});
-			currentCoursePanel.add(btn_addStudent);
+			currentCoursePanel.add(btn_deleteStudent);
+			
+			
+			
+			JButton btn_curveScore = new JButton("Curve");
+			btn_curveScore.setBounds(650, 20, 200, 30);
+			currentCoursePanel.add(btn_curveScore);
+			btn_curveScore.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					CurveScore frame2 = new CurveScore(course);
+					frame2.frame.setVisible(true);
+					
+				}
+			});
+			
+
 		
 			JButton btn_changeweight = new JButton("Change Weight");
 			btn_changeweight.addActionListener(new ActionListener() {

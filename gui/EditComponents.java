@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
-public class editComponents {
+public class EditComponents {
 
 	JFrame frame;
 
@@ -45,7 +45,7 @@ public class editComponents {
 	/**
 	 * Create the application.
 	 */
-	public editComponents(Course course) {
+	public EditComponents(Course course) {
 		initialize(course);
 	}
 

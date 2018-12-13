@@ -2,6 +2,7 @@ package gui;
 
 
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -55,9 +58,27 @@ public class CourseDetail {
 		}
 		
 		for (Course course: db.courseList) {
+
 			//add tab
 			JPanel currentCoursePanel = new JPanel();
 			jTabbedpane.addTab(course.getCourseName().getCode(), currentCoursePanel);
+			
+			//control panels
+			
+			JPanel Settings = new JPanel();
+			Settings.setLayout(null);
+			Settings.setBounds(49, 10, 256, 90);
+			Border blackline = BorderFactory.createLineBorder(Color.GRAY);
+			Settings.setBorder(BorderFactory.createTitledBorder(blackline, "Course Settings"));
+			currentCoursePanel.add(Settings);
+			
+			
+			
+			JPanel Summarize = new JPanel();
+			Summarize.setLayout(null);
+			Summarize.setBounds(314, 10, 136, 90);
+			Summarize.setBorder(BorderFactory.createTitledBorder(blackline, "Summarize Data"));
+			currentCoursePanel.add(Summarize);
 			
 			//add buttons
 			
@@ -67,7 +88,7 @@ public class CourseDetail {
 			Image newimg = image.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
 			btn_addStudent.setIcon(imageIcon);
-			btn_addStudent.setBounds(80, 150, 20, 20);
+			btn_addStudent.setBounds(80, 183, 20, 20);
 			btn_addStudent.setContentAreaFilled(false);
 			btn_addStudent.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -85,7 +106,7 @@ public class CourseDetail {
 			Image newimg2 = image2.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon2 = new ImageIcon(newimg2);
 			btn_deleteStudent.setIcon(imageIcon2);
-			btn_deleteStudent.setBounds(102, 150, 20, 20);
+			btn_deleteStudent.setBounds(102, 183, 20, 20);
 			btn_deleteStudent.setContentAreaFilled(false);
 			btn_deleteStudent.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -99,9 +120,9 @@ public class CourseDetail {
 			
 			
 			JButton btn_curveScore = new JButton("Curve");
-			btn_curveScore.setBounds(100, 20, 110, 25);
+			btn_curveScore.setBounds(130, 20, 117, 25);
 			btn_curveScore.setFont(new Font("Arial", Font.BOLD, 9));
-			currentCoursePanel.add(btn_curveScore);
+			Settings.add(btn_curveScore);
 			btn_curveScore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
@@ -111,7 +132,30 @@ public class CourseDetail {
 				}
 			});
 			
+			
+			JButton btn_addComponent = new JButton("Add Component");
+			btn_addComponent.setBounds(10, 20, 117, 25);
+			btn_addComponent.setFont(new Font("Arial", Font.BOLD, 9));
+			Settings.add(btn_addComponent);
+			btn_addComponent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
 
+					
+				}
+			});
+			
+			JButton btn_deleteComponent = new JButton("Delete Component");
+			btn_deleteComponent.setBounds(10, 50, 117, 25);
+			btn_deleteComponent.setFont(new Font("Arial", Font.BOLD, 9));
+			Settings.add(btn_deleteComponent);
+			btn_deleteComponent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+
+					
+				}
+			});
 		
 			JButton btn_changeweight = new JButton("Change Weight");
 			btn_changeweight.addActionListener(new ActionListener() {
@@ -121,15 +165,15 @@ public class CourseDetail {
 					frame2.frame.setVisible(true);
 				}
 			});
-			btn_changeweight.setBounds(100, 50, 110, 25);
+			btn_changeweight.setBounds(130, 50, 117, 25);
 			btn_changeweight.setFont(new Font("Arial", Font.BOLD, 9));
-			currentCoursePanel.add(btn_changeweight);
+			Settings.add(btn_changeweight);
 			
 			
 			
 			
 			JButton btn_printStat = new JButton("Print Statistics");
-			btn_printStat.setBounds(300, 50, 110, 25);
+			btn_printStat.setBounds(10, 50, 117, 25);
 			btn_printStat.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_printStat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -213,17 +257,17 @@ public class CourseDetail {
 					}
 				}
 			});
-			currentCoursePanel.add(btn_printStat);
+			Summarize.add(btn_printStat);
 			//add table to panel
 			JTable table = createTable(course, db);
 			table.getTableHeader().setResizingAllowed(false);
 			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-			sp.setBounds(50, 100, 1200, 600);
+			sp.setBounds(50, 130, 1200, 600);
 			currentCoursePanel.setLayout(null);
 			currentCoursePanel.add(sp);
 			//calc final
 			JButton btn_calFinal = new JButton("Calculate Final");
-			btn_calFinal.setBounds(300, 20, 110, 25);
+			btn_calFinal.setBounds(10, 20, 117, 25);
 			btn_calFinal.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_calFinal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -252,7 +296,7 @@ public class CourseDetail {
 					}
 				}
 			});
-			currentCoursePanel.add(btn_calFinal);
+			Summarize.add(btn_calFinal);
 			
 		}
 	}

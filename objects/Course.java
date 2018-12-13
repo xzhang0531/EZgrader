@@ -133,7 +133,7 @@ public class Course implements Gradeable{
 		}
 		Arrays.sort(scores);
 		if (scores.length % 2 == 0) {
-			return (scores[scores.length/2] +scores[scores.length/2 + 1])/2;
+			return (scores[scores.length/2 - 1] +scores[scores.length/2])/2;
 		} else {
 			return scores[scores.length/2];
 		}
@@ -161,8 +161,9 @@ public class Course implements Gradeable{
 						double weight1 = stuType.equals("UG")?ca.getUgWeight():ca.getGWeight();
 						for(Assignment a: ca.getAssignmentList()) {
 							double weight2 = stuType.equals("UG")?a.getUgWeight():a.getGWeight();
-							double score = a.getScoreList().get(s).getPercentage();
-							finalScore += score * weight2 * weight1;
+							double score = a.getScoreList().get(s) == null?0:a.getScoreList().get(s).getPercentage();
+							double curve = a.getCurvedScore();
+							finalScore += (score + curve) * weight2 * weight1;
 						}
 					}
 				}

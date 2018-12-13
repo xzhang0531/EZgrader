@@ -15,6 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,12 +23,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import db.Database;
+import gui.lib.BuidColumn;
 import gui.lib.ButtonColumn;
 import gui.lib.ColumnGroup;
 import gui.lib.GroupableTableHeader;
@@ -35,7 +38,6 @@ import gui.lib.TableCellListener;
 import objects.Assignment;
 import objects.Category;
 import objects.Course;
-import objects.Score;
 import objects.Student;
 
 public class CourseDetail {
@@ -88,6 +90,8 @@ public class CourseDetail {
 			btn_deleteStudent.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
+					DeleteStudent d = new DeleteStudent(db, course);
+					d.frame.setVisible(true);
 				}
 			});
 			currentCoursePanel.add(btn_deleteStudent);
@@ -95,7 +99,8 @@ public class CourseDetail {
 			
 			
 			JButton btn_curveScore = new JButton("Curve");
-			btn_curveScore.setBounds(650, 20, 200, 30);
+			btn_curveScore.setBounds(100, 20, 110, 25);
+			btn_curveScore.setFont(new Font("Arial", Font.BOLD, 9));
 			currentCoursePanel.add(btn_curveScore);
 			btn_curveScore.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -124,9 +129,91 @@ public class CourseDetail {
 			
 			
 			JButton btn_printStat = new JButton("Print Statistics");
-			btn_printStat.setBounds(500, 20, 150, 30);
-			currentCoursePanel.add(btn_printStat);		
-			
+			btn_printStat.setBounds(300, 50, 110, 25);
+			btn_printStat.setFont(new Font("Arial", Font.BOLD, 9));
+			btn_printStat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						db.updateDB();
+						Course newestCourse = null;
+						for(Course c: db.courseList) {
+							if(c.getCourseId() == course.getCourseId()) {
+								newestCourse = c;
+								newestCourse.calculateFinalScore();
+							}
+						}
+						JDialog d = new JDialog(frame, "Statistic"); 
+						JPanel p = new JPanel();
+						p.setLayout(null);
+						
+						
+						JLabel lblPrintCourseStatistics = new JLabel("Course Stats for:");
+						JLabel lblNoStuLabel = new JLabel("Number of Students:");
+						JLabel lblFinalScoreAverage = new JLabel("Final Score Average:");
+						JLabel lblFinalScoreMedian = new JLabel("Final Score Median:");
+						JLabel lblMaximumScore = new JLabel("Maximum Score:");
+						JLabel lblMinimumScore = new JLabel("Minimum Score:");
+						JTextField courseNameText = new JTextField(newestCourse.getCourseName().getName());
+						JTextField sizeText = new JTextField(String.valueOf(newestCourse.getFinalScoreList().size()));
+						JTextField averageText = new JTextField(String.valueOf(newestCourse.calculateAverage()));
+						JTextField medianText = new JTextField(String.valueOf(newestCourse.calculateMedian()));
+						JTextField maximumText = new JTextField(String.valueOf(newestCourse.getMax()));
+						JTextField minimumText = new JTextField(String.valueOf(newestCourse.getMin()));
+
+						lblPrintCourseStatistics.setBounds(95, 20, 140, 26);
+						lblNoStuLabel.setBounds           (72, 65, 140, 16);
+						lblFinalScoreAverage.setBounds    (72, 105, 140, 16);
+						lblFinalScoreMedian.setBounds     (75, 145, 140, 16);
+						lblMaximumScore.setBounds         (94, 185, 140, 16);
+						lblMinimumScore.setBounds         (95, 225, 140, 16);
+						courseNameText.setBounds          (218, 20, 130, 26);
+						sizeText.setBounds                (218, 60, 130, 26);
+						averageText.setBounds             (218, 100, 130, 26);
+						medianText.setBounds              (218, 140, 130, 26);
+						maximumText.setBounds             (218, 180, 130, 26);
+						minimumText.setBounds             (218, 220, 130, 26);
+											
+						p.add(lblPrintCourseStatistics);						
+						p.add(lblNoStuLabel);
+						p.add(lblFinalScoreAverage);
+						p.add(lblFinalScoreMedian);
+						p.add(lblMaximumScore);
+						p.add(lblMinimumScore);
+						p.add(courseNameText);
+						p.add(sizeText);
+						p.add(averageText);
+						p.add(medianText);
+						p.add(maximumText);
+						p.add(minimumText);
+						
+						courseNameText.setEditable(false);
+						sizeText.setEditable(false);
+						averageText.setEditable(false);
+						medianText.setEditable(false);
+						maximumText.setEditable(false);
+						minimumText.setEditable(false);
+						
+
+						JButton btnBack = new JButton("Back");
+						btnBack.setBounds(170, 275, 75, 29);
+						btnBack.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								d.setVisible(false);
+							}
+						});
+						p.add(btnBack);
+						
+						d.add(p);
+						d.setLocation(400, 200);
+						d.setSize(450, 400); 
+						d.setVisible(true); 
+
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+			currentCoursePanel.add(btn_printStat);
 			//add table to panel
 			JTable table = createTable(course, db);
 			table.getTableHeader().setResizingAllowed(false);
@@ -136,7 +223,8 @@ public class CourseDetail {
 			currentCoursePanel.add(sp);
 			//calc final
 			JButton btn_calFinal = new JButton("Calculate Final");
-			btn_calFinal.setBounds(300, 20, 150, 30);
+			btn_calFinal.setBounds(300, 20, 110, 25);
+			btn_calFinal.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_calFinal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
@@ -153,7 +241,8 @@ public class CourseDetail {
 							for (Student student: newestCourse.getStudentList()) {
 								if(student.getBuid().equals(buid)) {
 									double finalScore = newestCourse.getFinalScoreList().get(student);
-									table.getModel().setValueAt(finalScore, i, table.getColumnCount()-1);
+									String score = String.format("%.2f", finalScore);
+									table.getModel().setValueAt(score, i, table.getColumnCount()-1);
 								}
 							}
 						}
@@ -201,7 +290,7 @@ public class CourseDetail {
 				for(Assignment a: c.getAssignmentList()) {
 					if(a.getScoreList().containsKey(s)) {
 						rowdata.add(String.valueOf(a.getScoreList().get(s).getPointsLost()));
-						rowdata.add(String.valueOf(a.getScoreList().get(s).getPercentage()));
+						rowdata.add(String.format("%.2f", a.getScoreList().get(s).getPercentage()));
 						rowdata.add(String.valueOf(a.getScoreList().get(s).getComment()));
 					}else {
 						rowdata.add(null);
@@ -236,7 +325,7 @@ public class CourseDetail {
 		for(Category c: course.getCategoryList()) {
 			ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + c.getGWeight()*100 + "%/UG:" + c.getUgWeight()*100 + "%)", 1);
 			for(Assignment a: c.getAssignmentList()) {
-				ColumnGroup assignmentGroup = new ColumnGroup(a.getAssignmentName(), 2);
+				ColumnGroup assignmentGroup = new ColumnGroup(a.getAssignmentName()+ " (G:" + a.getGWeight()*100 + "%/UG:" + a.getUgWeight()*100 + "%)", 2);
 				assignmentGroup.add(cm.getColumn(columeNum));
 				columeNum += 1;
 				assignmentGroup.add(cm.getColumn(columeNum));
@@ -325,7 +414,9 @@ public class CourseDetail {
 		for(int i = 5; i < table.getColumnCount(); i+=3) {
 			ButtonColumn buttonsColumn = new ButtonColumn(table, i, frame, course);
 		}
-
+		//buid column
+		BuidColumn buidColumn = new BuidColumn(table, 0, frame);
+		
 		return table;
 	}
 	

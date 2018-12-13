@@ -569,4 +569,18 @@ public class Database {
 		}
 		
 	}
+	
+	public boolean deleteEnrollment(String buid, int courseid) throws SQLException {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("DELETE FROM Enrollment where buid = '" + buid + "' and courseid = " +courseid);
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			if (stmt != null) stmt.close();
+		}
+	}
 }

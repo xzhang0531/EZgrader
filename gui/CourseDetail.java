@@ -140,7 +140,8 @@ public class CourseDetail {
 			btn_addComponent.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
-
+					AddComponent addcomponent = new AddComponent(course);
+					addcomponent.frame.setVisible(true);
 					
 				}
 			});

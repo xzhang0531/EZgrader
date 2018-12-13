@@ -24,7 +24,6 @@ public class DeleteStudent {
 	
 	public DeleteStudent(Database db, Course course) {
 		frame = new JFrame();
-		frame.setTitle("Delete Student");
 		panel = new JPanel();
 		panel.setLayout(null);
 		

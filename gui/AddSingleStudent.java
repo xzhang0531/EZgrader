@@ -24,7 +24,6 @@ public class AddSingleStudent {
 	
 	public AddSingleStudent(Database db, Course course) {
 		frame = new JFrame();
-		frame.setTitle("Add Student");
 		panel = new JPanel();
 		panel.setLayout(null);
 		

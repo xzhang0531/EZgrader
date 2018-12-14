@@ -63,8 +63,30 @@ public class CourseDetail {
 			JPanel currentCoursePanel = new JPanel();
 			jTabbedpane.addTab(course.getCourseName().getCode(), currentCoursePanel);
 			if(course.getCourseId() == cid) jTabbedpane.setSelectedComponent(currentCoursePanel);
-			//control panels
 			
+			
+			//logo
+			
+			ImageIcon buLogo = new ImageIcon("/home/xzhang/EZgrader/gui/img/BU.PNG");
+			Image buLogoImage = buLogo.getImage();
+			Image newBuLogoImage = buLogoImage.getScaledInstance(150, 80,  java.awt.Image.SCALE_SMOOTH);
+			buLogo = new ImageIcon(newBuLogoImage);
+			JLabel buLogoLabel = new JLabel(buLogo);
+			buLogoLabel.setBounds(1100, 18, buLogo.getIconWidth(), buLogo.getIconHeight());
+			currentCoursePanel.add(buLogoLabel);
+			
+			
+			ImageIcon logo = new ImageIcon("/home/xzhang/EZgrader/gui/img/exgrader.png");
+			Image logoImage = logo.getImage();
+			Image newLogoImage = logoImage.getScaledInstance(640, 90,  java.awt.Image.SCALE_SMOOTH);
+			logo = new ImageIcon(newLogoImage);		
+			JLabel logoLabel = new JLabel(logo);
+			logoLabel.setBounds(610, 12, logo.getIconWidth(), logo.getIconHeight());
+			currentCoursePanel.add(logoLabel);
+			
+
+			
+			//control panels
 			JPanel Settings = new JPanel();
 			Settings.setLayout(null);
 			Settings.setBounds(49, 10, 256, 90);

@@ -9,6 +9,8 @@ import objects.Category;
 import objects.Course;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,6 +66,13 @@ public class AddComponent {
 		JButton btnNewButton = new JButton("Add");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					Double.parseDouble(textField.getText());
+				}catch(Exception e1) {
+					JOptionPane.showMessageDialog(frame, "Invalid value!");
+					return;
+				}
+				
 				for (Category category : course.getCategoryList()) {
 					if (comboBox.getSelectedItem().toString().equals(category.getCategoryName())) {
 						int size = category.getAssignmentList().size();

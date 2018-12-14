@@ -34,19 +34,15 @@ public class ImportSavedSettings {
 		
 		JComboBox comboBox = new JComboBox();
 		Database db = new Database();
-		try {
-			db.connect();
 
-			db.updateDB();
-			List<Course> courseList = db.courseList;
-			for (Course cur : courseList) {
-				comboBox.addItem(cur.getCourseName().getCode() +" " +cur.getCourseName().getName());
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			db.disconnect();
+		db.connect();
+
+		db.updateDB();
+		List<Course> courseList = db.courseList;
+		for (Course cur : courseList) {
+			comboBox.addItem(cur.getCourseName().getCode() +" " +cur.getCourseName().getName());
 		}
+
 		comboBox.setBounds(83, 109, 219, 60);
 		frame.getContentPane().add(comboBox);
 		
@@ -80,6 +76,7 @@ public class ImportSavedSettings {
 					err.printStackTrace();
 				}
 				frame.dispose();
+				db.disconnect();
 				AddStudent frame2 = new AddStudent(course);
 				frame2.frame.setVisible(true);
 			}
@@ -91,6 +88,7 @@ public class ImportSavedSettings {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
+				db.disconnect();
 				Welcome frame2 = new Welcome();
 				frame2.frame.setVisible(true);
 			}

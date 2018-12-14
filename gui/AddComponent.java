@@ -72,7 +72,8 @@ public class AddComponent {
 					JOptionPane.showMessageDialog(frame, "Invalid value!");
 					return;
 				}
-				
+				Database db = new Database();
+				db.connect();
 				for (Category category : course.getCategoryList()) {
 					if (comboBox.getSelectedItem().toString().equals(category.getCategoryName())) {
 						int size = category.getAssignmentList().size();
@@ -80,8 +81,7 @@ public class AddComponent {
 						String name = category.getCategoryName() +" " + size;
 						double weight = 1.0 / (size);
 						Assignment assignment = new Assignment(name, category.getCategoryName(), weight, weight, Double.parseDouble(textField.getText()), 0);
-						Database db = new Database();
-						db.connect();
+						
 						db.AddAssignment(assignment, course.getCourseId(), category.getCategoryName());
 						
 						for(Assignment a: category.getAssignmentList()) {
@@ -100,7 +100,7 @@ public class AddComponent {
 					}
 				}
 				
-
+				db.disconnect();
 				
 			}});
 		btnNewButton.setBounds(156, 304, 117, 29);

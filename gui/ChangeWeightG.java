@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -23,32 +24,11 @@ public class ChangeWeightG {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ChangeWeightG window = new ChangeWeightG();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public ChangeWeightG(Course course) {
 		initialize(course);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize(Course course) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 821, 662);
@@ -56,7 +36,7 @@ public class ChangeWeightG {
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(55, 78, 658, 511);
+		panel.setBounds(55, 78, 658, 463);
 		panel.setLayout(null);
 
 		List<Category> categoryList = course.getCategoryList();
@@ -69,8 +49,8 @@ public class ChangeWeightG {
 			JTextField jfield_g = new JTextField(20);
 			jfield_g.setName(category.getCategoryName());
 			
-			label_g.setBounds(110, 100+increment, 100, 19);
-			jfield_g.setBounds(220, 100+increment, 100, 19);
+			label_g.setBounds(200, 100+increment, 130, 19);
+			jfield_g.setBounds(340, 100+increment, 130, 19);
 			
 
 			
@@ -82,7 +62,7 @@ public class ChangeWeightG {
 //			Weight.add(title);
 		}
 		JButton change = new JButton();
-		change.setBounds(110, 100+increment, 100, 19);
+		change.setBounds(200, 100+increment, 130, 29);
 		change.setText("change");
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -94,37 +74,59 @@ public class ChangeWeightG {
 				    		if (obj instanceof JTextField) {
 				    			JTextField text = (JTextField) obj;
 				    			if (text.getName().equals(category.getCategoryName())) {
+				    				try {
+				    					Double.parseDouble(text.getText());
+				    				}catch(Exception e1) {
+				    					JOptionPane.showMessageDialog(frame, "Invalid values");
+				    					weightMap.clear();
+				    					return;
+				    				}
 				    				weightMap.put(category.getCategoryName(), Double.parseDouble(text.getText()));
 				    			}
 				    		}
 			    		}
 				}
+				
+				double total = 0;
+				for(Double value:weightMap.values()) {
+					total += value;
+				}
+				
+				if (total != 1.0) {
+					JOptionPane.showMessageDialog(frame, "Values must be added up to one!");
+					weightMap.clear();
+					return;
+				}
+				Database db = new Database();
+				db.connect();
 				for(String key:weightMap.keySet()) {
-					Database db = new Database();
-					db.connect();
+					
 					db.updateCategoryWeight("g", course.getCourseId(), key, weightMap.get(key));
 					
 				}
+				db.disconnect();
 				CourseDetail c = new CourseDetail();
 				frame.dispose();
 				c.run(course.getCourseId());
 			}});
 		panel.add(change);
-//		Database db = new Database();
-//		db.connect("root", "czx123456");
-//		try {
-//			db.updateDB();
-//			List<Course> courseList = db.courseList;
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(340, 100+increment, 130, 29);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail c = new CourseDetail();
+				c.run(course.getCourseId());
+			}});
+		panel.add(btnCancel);
+		
 		frame.getContentPane().add(panel);
 		
 		JLabel lblGraduate = new JLabel();
 		lblGraduate.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		lblGraduate.setText("Graduate");
-		lblGraduate.setBounds(200, 48, 105, 16);
+		lblGraduate.setBounds(268, 48, 150, 16);
 		panel.add(lblGraduate);
 	}
 

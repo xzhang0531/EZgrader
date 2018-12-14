@@ -44,6 +44,8 @@ public class ImportSavedSettings {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			db.disconnect();
 		}
 		comboBox.setBounds(83, 109, 219, 60);
 		frame.getContentPane().add(comboBox);

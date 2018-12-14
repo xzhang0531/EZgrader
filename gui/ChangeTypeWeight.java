@@ -19,32 +19,12 @@ public class ChangeTypeWeight {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ChangeTypeWeight window = new ChangeTypeWeight();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public ChangeTypeWeight(List<Category> categoryList, String category, int courseid) {
 		initialize(categoryList, category, courseid);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(List<Category> categoryList, String category, int courseid) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 821, 662);
@@ -56,7 +36,7 @@ public class ChangeTypeWeight {
 		panel.setLayout(null);
 		JLabel label_type = new JLabel();
 		label_type.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-		label_type.setBounds(72, 31, 187, 50);
+		label_type.setBounds(72, 31, 200, 50);
 		label_type.setText("UnderGraduate");
 		panel.add(label_type);
 
@@ -64,7 +44,7 @@ public class ChangeTypeWeight {
 		JLabel lblGraduate = new JLabel();
 		lblGraduate.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		lblGraduate.setText("Graduate");
-		lblGraduate.setBounds(374, 48, 105, 16);
+		lblGraduate.setBounds(300, 48, 200, 16);
 		panel.add(lblGraduate);
 		frame.getContentPane().add(panel);
 		List<Assignment> assignmentList = new LinkedList<>();
@@ -83,14 +63,14 @@ public class ChangeTypeWeight {
 
 
 			
-			label_sw.setBounds(72, 100+increment, 100, 19);
+			label_sw.setBounds(72, 100+increment, 200, 30);
 
 			
 			JLabel label_g = new JLabel();
 			label_g.setText(assignment.getAssignmentName() + " :" + assignment.getGWeight());
 
 			
-			label_g.setBounds(374, 100+increment, 100, 19);
+			label_g.setBounds(300, 100+increment, 200, 30);
 
 			
 
@@ -104,7 +84,7 @@ public class ChangeTypeWeight {
 //			Weight.add(title);
 		}
 		JButton changeUG = new JButton();
-		changeUG.setBounds(68, 100+increment, 100, 19);
+		changeUG.setBounds(68, 100+increment, 100, 30);
 		changeUG.setText("change");
 		changeUG.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,7 +95,7 @@ public class ChangeTypeWeight {
 		panel.add(changeUG);
 		
 		JButton changeG = new JButton();
-		changeG.setBounds(374, 100+increment, 100, 19);
+		changeG.setBounds(300, 100+increment, 100, 30);
 		changeG.setText("change");
 		changeG.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -124,6 +104,17 @@ public class ChangeTypeWeight {
 				change.frame.setVisible(true);
 			}});
 		panel.add(changeG);
+		
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(520, 100 + increment, 100, 30);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail c = new CourseDetail();
+				c.run(courseid);
+			}});
+		panel.add(btnCancel);
 	}
 
 }

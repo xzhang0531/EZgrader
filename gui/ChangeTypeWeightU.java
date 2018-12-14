@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -24,32 +25,12 @@ public class ChangeTypeWeightU {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ChangeTyperWeightU window = new ChangeTyperWeightU();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public ChangeTypeWeightU(List<Category> categoryList, String category, int courseid) {
 		initialize(categoryList, category, courseid);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(List<Category> categoryList, String category, int courseid) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 821, 662);
@@ -61,7 +42,7 @@ public class ChangeTypeWeightU {
 		panel.setLayout(null);
 		JLabel label_type = new JLabel();
 		label_type.setFont(new Font("Lucida Grande", Font.BOLD, 20));
-		label_type.setBounds(200, 31, 187, 50);
+		label_type.setBounds(240, 31, 187, 50);
 		label_type.setText("UnderGraduate");
 		panel.add(label_type);
 		List<Assignment> assignmentList = new LinkedList<>();
@@ -80,8 +61,8 @@ public class ChangeTypeWeightU {
 			jfield_sw.setName(assignment.getAssignmentName());
 
 			
-			label_sw.setBounds(110, 100+increment, 100, 19);
-			jfield_sw.setBounds(220, 100+increment, 100, 19);
+			label_sw.setBounds(200, 100+increment, 130, 19);
+			jfield_sw.setBounds(340, 100+increment, 130, 19);
 			
 
 			
@@ -93,7 +74,7 @@ public class ChangeTypeWeightU {
 //			Weight.add(title);
 		}
 		JButton change = new JButton();
-		change.setBounds(110, 100+increment, 100, 19);
+		change.setBounds(200, 100+increment, 130, 29);
 		change.setText("change");
 		change.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -113,37 +94,56 @@ public class ChangeTypeWeightU {
 				    		if (obj instanceof JTextField) {
 				    			JTextField text = (JTextField) obj;
 				    			if (text.getName().equals(assignment.getAssignmentName())) {
+				    				try {
+				    					Double.parseDouble(text.getText());
+				    				}catch(Exception e1) {
+				    					JOptionPane.showMessageDialog(frame, "Invalid values");
+				    					weightMap.clear();
+				    					return;
+				    				}
 				    				weightMap.put(assignment.getAssignmentName(), Double.parseDouble(text.getText()));
 				    			}
 				    		}
 			    		}
 				}
+				
+				double total = 0;
+				for(Double value:weightMap.values()) {
+					total += value;
+				}
+				
+				if (total != 1.0) {
+					JOptionPane.showMessageDialog(frame, "Values must be added up to one!");
+					weightMap.clear();
+					return;
+				}
+				
+				Database db = new Database();
+				db.connect();
 				for(String key:weightMap.keySet()) {
-					Database db = new Database();
-					db.connect();
+					
 					db.updateAssignmentWeight("ug", courseid, key, weightMap.get(key));
 					
 				}
-//				for (String s : weightMap.keySet()) {
-//					System.out.println(s);
-//				}
-//				for (Double b : weightMap.values()) {
-//					System.out.println(b);
-//				}
+				db.disconnect();
 				CourseDetail course = new CourseDetail();
 				frame.dispose();
 				course.run(courseid);
 			}});
 		panel.add(change);
-//		Database db = new Database();
-//		db.connect("root", "czx123456");
-//		try {
-//			db.updateDB();
-//			List<Course> courseList = db.courseList;
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		
+		
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(340, 100+increment, 130, 29);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail c = new CourseDetail();
+				c.run(courseid);
+			}});
+		panel.add(btnCancel);
+
 		frame.getContentPane().add(panel);
 	}
 

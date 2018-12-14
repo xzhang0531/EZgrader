@@ -239,25 +239,26 @@ public class CourseDetail {
 					JLabel lblFinalScoreMedian = new JLabel("Final Score Median:");
 					JLabel lblMaximumScore = new JLabel("Maximum Score:");
 					JLabel lblMinimumScore = new JLabel("Minimum Score:");
+					
 					JTextField courseNameText = new JTextField(newestCourse.getCourseName().getName());
 					JTextField sizeText = new JTextField(String.valueOf(newestCourse.getFinalScoreList().size()));
-					JTextField averageText = new JTextField(String.valueOf(newestCourse.calculateAverage()));
-					JTextField medianText = new JTextField(String.valueOf(newestCourse.calculateMedian()));
-					JTextField maximumText = new JTextField(String.valueOf(newestCourse.getMax()));
-					JTextField minimumText = new JTextField(String.valueOf(newestCourse.getMin()));
+					JTextField averageText = new JTextField(String.format("%.2f", newestCourse.calculateAverage()));
+					JTextField medianText = new JTextField(String.format("%.2f", newestCourse.calculateMedian()));
+					JTextField maximumText = new JTextField(String.format("%.2f", newestCourse.getMax()));
+					JTextField minimumText = new JTextField(String.format("%.2f", newestCourse.getMin()));
 
-					lblPrintCourseStatistics.setBounds(95, 20, 140, 26);
-					lblNoStuLabel.setBounds           (72, 65, 140, 16);
-					lblFinalScoreAverage.setBounds    (72, 105, 140, 16);
-					lblFinalScoreMedian.setBounds     (75, 145, 140, 16);
-					lblMaximumScore.setBounds         (94, 185, 140, 16);
-					lblMinimumScore.setBounds         (95, 225, 140, 16);
-					courseNameText.setBounds          (218, 20, 130, 26);
-					sizeText.setBounds                (218, 60, 130, 26);
-					averageText.setBounds             (218, 100, 130, 26);
-					medianText.setBounds              (218, 140, 130, 26);
-					maximumText.setBounds             (218, 180, 130, 26);
-					minimumText.setBounds             (218, 220, 130, 26);
+					lblPrintCourseStatistics.setBounds(98, 20, 150, 26);
+					lblNoStuLabel.setBounds           (72, 65, 150, 16);
+					lblFinalScoreAverage.setBounds    (73, 105, 150, 16);
+					lblFinalScoreMedian.setBounds     (79, 145, 150, 16);
+					lblMaximumScore.setBounds         (103, 185, 150, 16);
+					lblMinimumScore.setBounds         (107, 225, 150, 16);
+					courseNameText.setBounds          (228, 20, 130, 26);
+					sizeText.setBounds                (228, 60, 130, 26);
+					averageText.setBounds             (228, 100, 130, 26);
+					medianText.setBounds              (228, 140, 130, 26);
+					maximumText.setBounds             (228, 180, 130, 26);
+					minimumText.setBounds             (228, 220, 130, 26);
 										
 					p.add(lblPrintCourseStatistics);						
 					p.add(lblNoStuLabel);
@@ -400,9 +401,9 @@ public class CourseDetail {
 		GroupableTableHeader t_header = (GroupableTableHeader)table.getTableHeader();
 		int columeNum = 3;
 		for(Category c: course.getCategoryList()) {
-			ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + c.getGWeight()*100 + "%/UG:" + c.getUgWeight()*100 + "%)", 1);
+			ColumnGroup categoryGroup = new ColumnGroup(c.getCategoryName() + " (G:" + String.format("%.1f", c.getGWeight()*100) + "%/UG:" + String.format("%.1f", c.getUgWeight()*100) + "%)", 1);
 			for(Assignment a: c.getAssignmentList()) {
-				ColumnGroup assignmentGroup = new ColumnGroup(a.getAssignmentName()+ " (G:" + a.getGWeight()*100 + "%/UG:" + a.getUgWeight()*100 + "%)", 2);
+				ColumnGroup assignmentGroup = new ColumnGroup(a.getAssignmentName()+ " (G:" + String.format("%.1f", a.getGWeight()*100) + "%/UG:" + String.format("%.1f", a.getUgWeight()*100) + "%)", 2);
 				assignmentGroup.add(cm.getColumn(columeNum));
 				columeNum += 1;
 				assignmentGroup.add(cm.getColumn(columeNum));

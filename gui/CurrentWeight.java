@@ -19,32 +19,12 @@ public class CurrentWeight {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					CurrentWeight window = new CurrentWeight();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public CurrentWeight(Course course) {
 		initialize(course);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(Course course) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 821, 662);
@@ -52,7 +32,7 @@ public class CurrentWeight {
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(55, 78, 658, 443);
+		panel.setBounds(55, 78, 821, 443);
 		panel.setLayout(null);
 		JLabel label_type = new JLabel();
 		label_type.setFont(new Font("Lucida Grande", Font.BOLD, 20));
@@ -64,7 +44,7 @@ public class CurrentWeight {
 		JLabel lblGraduate = new JLabel();
 		lblGraduate.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		lblGraduate.setText("Graduate");
-		lblGraduate.setBounds(374, 48, 200, 16);
+		lblGraduate.setBounds(300, 48, 200, 16);
 		panel.add(lblGraduate);
 		frame.getContentPane().add(panel);
 		List<Category> categoryList = course.getCategoryList();
@@ -82,7 +62,7 @@ public class CurrentWeight {
 			label_g.setText(category.getCategoryName() + " :" + category.getGWeight());
 
 			
-			label_g.setBounds(374, 100+increment, 200, 30);
+			label_g.setBounds(300, 100+increment, 200, 30);
 
 			
 
@@ -93,7 +73,7 @@ public class CurrentWeight {
 
 			
 			increment += 50;
-//			Weight.add(title);
+
 		}
 		JButton changeUG = new JButton();
 		changeUG.setBounds(68, 100+increment, 100, 30);
@@ -107,7 +87,7 @@ public class CurrentWeight {
 		panel.add(changeUG);
 		
 		JButton changeG = new JButton();
-		changeG.setBounds(374, 100+increment, 100, 30);
+		changeG.setBounds(300, 100+increment, 100, 30);
 		changeG.setText("change");
 		changeG.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -117,6 +97,17 @@ public class CurrentWeight {
 			}});
 		panel.add(changeG);
 		
+		
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(520, 100 + increment, 100, 30);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail c = new CourseDetail();
+				c.run(course.getCourseId());
+			}});
+		panel.add(btnCancel);
 		
 	}
 

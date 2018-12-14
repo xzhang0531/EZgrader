@@ -287,6 +287,7 @@ public class EditComponents {
 		List<Category> components = new LinkedList<>();
 		btnFinalizeChanges_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				int count = panel_3.getComponentCount();
 			    for(String title : Weights) {
 			    		for (int i = 0; i < count; i++) {
@@ -294,7 +295,16 @@ public class EditComponents {
 				    		if (obj instanceof JTextField) {
 				    			JTextField text = (JTextField) obj;
 				    			if (text.getName().equals(title)) {
-				    				scorePair.add(new String[] {title, text.getText()});
+				    				try {
+				    					Double.parseDouble(text.getText());
+				    					scorePair.add(new String[] {title, text.getText()});
+				    				}catch(Exception e1) {
+				    					scorePair.removeAll(scorePair);
+				    					JOptionPane.showMessageDialog(frame, "Invalid values");
+				    					return;
+				    					
+				    				}
+				    				
 				    			}
 				    		}
 			    		}
@@ -302,7 +312,7 @@ public class EditComponents {
 
 			    int index = 0;
 				for (String[] cur: weightPair) {
-					Category category = new Category(cur[0], 0, Double.parseDouble(cur[1]), Double.parseDouble(cur[1]));
+					Category category = new Category(cur[0], index, Double.parseDouble(cur[1]), Double.parseDouble(cur[1]));
 					Assignment assignment = new Assignment(scorePair.get(index)[0], cur[0], 1, 1, Double.parseDouble(scorePair.get(index)[1]), 0);
 					category.addAssignment(assignment);
 					components.add(category);

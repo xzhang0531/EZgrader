@@ -114,7 +114,9 @@ public class LocateFile {
 					
 				}catch(Exception err) {
 					err.printStackTrace();;
-				}		
+				}finally {
+					db.disconnect();
+				}
 			}
 		});
 		btnUploadStudentsTo.setBounds(118, 134, 200, 29);

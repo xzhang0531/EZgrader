@@ -64,6 +64,8 @@ public class CurrentCourse {
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.disconnect();
 		}
 		comboBox.setBounds(83, 109, 219, 50);
 		frame.getContentPane().add(comboBox);

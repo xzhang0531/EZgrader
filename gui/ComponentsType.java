@@ -18,32 +18,12 @@ public class ComponentsType {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ComponentsType window = new ComponentsType();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public ComponentsType(List<Category> categoryList, int courseid) {
 		initialize(categoryList, courseid);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(List<Category> categoryList, int courseid) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 683, 507);
@@ -57,8 +37,8 @@ public class ComponentsType {
 		}
 		frame.getContentPane().add(comboBox);
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnSelect = new JButton("Select");
+		btnSelect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				String category = (String)comboBox.getSelectedItem();
@@ -67,8 +47,25 @@ public class ComponentsType {
 				
 			}
 		});
-		btnNewButton.setBounds(263, 277, 117, 29);
-		frame.getContentPane().add(btnNewButton);
+		btnSelect.setBounds(200, 277, 117, 29);
+		frame.getContentPane().add(btnSelect);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(353, 277, 117, 29);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail c = new CourseDetail();
+				c.run(courseid);
+			}});
+		frame.getContentPane().add(btnCancel);
+		
+		
+		
+		
+		
+		
+		
 		
 		JLabel lblChooseTheComponent = new JLabel("Choose The Component You Want To Change");
 		lblChooseTheComponent.setFont(new Font("Lucida Grande", Font.PLAIN, 15));

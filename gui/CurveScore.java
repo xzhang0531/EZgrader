@@ -70,7 +70,14 @@ public class CurveScore {
 						if(assignment.getAssignmentName().equals(assignmentDropDown.getSelectedItem())){
 							Database db = new Database();
 							db.connect();
-							db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
+							try {
+								db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
+							}catch(Exception e1) {
+								
+							}finally {
+								db.disconnect();
+							}
+
 						}
 					}
 				}

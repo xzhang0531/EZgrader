@@ -37,6 +37,13 @@ public class Database {
 	}
 	
 	
+	public void disconnect() {
+		try {
+			this.conn.close();
+		} catch (Exception e) {}
+	}
+	
+	
 	//use it when you want to wipe out all data from database.
 	public void dropEntireDb() {
 		Connection conn = this.conn;

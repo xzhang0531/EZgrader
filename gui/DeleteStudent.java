@@ -40,11 +40,7 @@ public class DeleteStudent {
 			public void actionPerformed(ActionEvent e) {
 				String buid = stuDropDown.getSelectedItem().toString().split("  ")[0];
 						
-				try {
-					db.deleteEnrollment(buid, course.getCourseId());
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				db.deleteEnrollment(buid, course.getCourseId());
 				
 				frame.dispose();
 				CourseDetail c = new CourseDetail();

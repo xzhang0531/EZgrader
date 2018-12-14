@@ -72,25 +72,16 @@ public class AddComponent {
 						double weight = 1.0 / (size);
 						Assignment assignment = new Assignment(name, category.getCategoryName(), weight, weight, Double.parseDouble(textField.getText()), 0);
 						Database db = new Database();
-						db.connect("root", "sss5533");
-						try {
-							db.AddAssignment(assignment, course.getCourseId(), category.getCategoryName());
-						} catch (SQLException e1) {
-							e1.printStackTrace();
-						}
+						db.connect();
+						db.AddAssignment(assignment, course.getCourseId(), category.getCategoryName());
 						
 						for(Assignment a: category.getAssignmentList()) {
-							try {
-								db.updateAssignmentWeight("g", course.getCourseId(), a.getAssignmentName(), weight);
-								db.updateAssignmentWeight("ug", course.getCourseId(), a.getAssignmentName(), weight);
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							} finally {
-								frame.dispose();
-								CourseDetail cd = new CourseDetail();
-								cd.run();
-							}
-							
+							db.updateAssignmentWeight("g", course.getCourseId(), a.getAssignmentName(), weight);
+							db.updateAssignmentWeight("ug", course.getCourseId(), a.getAssignmentName(), weight);
+							frame.dispose();
+							CourseDetail cd = new CourseDetail();
+							cd.run();
+
 						}
 						
 						

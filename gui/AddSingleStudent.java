@@ -89,12 +89,8 @@ public class AddSingleStudent {
 					student = new UnderGraduate(name, buid, major, college, gpa);
 				}
 				
-				try {
-					db.AddSingleStudent(student);
-					db.AddEnrollment(student.getBuid(), course.getCourseId());
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				db.AddStudentWithCheck(student);
+				db.AddEnrollment(student.getBuid(), course.getCourseId());
 				
 				frame.dispose();
 				CourseDetail c = new CourseDetail();

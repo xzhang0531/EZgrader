@@ -2,6 +2,7 @@ package db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +14,6 @@ import objects.UnderGraduate;
 import objects.Assignment;
 import objects.Category;
 import objects.Course;
-import objects.CourseName;
 import objects.Graduate;
 import objects.Score;
 
@@ -23,7 +23,9 @@ public class Database {
 	public List<Course> courseList;
 	Connection conn;
 	
-	public void connect(String user, String pwd) {
+	public void connect() {
+		String user = "root";
+		String pwd = "sss5533";
 		try{  
 			Class.forName("com.mysql.jdbc.Driver");  
 			Connection conn=DriverManager.getConnection(  
@@ -35,7 +37,7 @@ public class Database {
 	}
 	
 	//use it when you want to wipe out all data from database.
-	public void dropEntireDb() throws SQLException{
+	public void dropEntireDb() {
 		Connection conn = this.conn;
 		Statement stmt = null;
 		try{
@@ -51,13 +53,15 @@ public class Database {
 		}catch(Exception e){ 
 			System.out.println(e);
 		}finally {
-			if (stmt != null) stmt.close();
-			conn.setAutoCommit(true);
+			try{
+				if (stmt != null) stmt.close();
+				conn.setAutoCommit(true);
+			} catch(Exception e1){}
 		}
 	}
 
 	//insert some fake data into SQL database.
-	public void insertFakeData() throws SQLException {
+	public void insertFakeData() {
 		Connection conn = this.conn;
 		Statement stmt = null;
 		try{
@@ -71,13 +75,20 @@ public class Database {
 			//fake course data
 			stmt.executeUpdate("INSERT INTO Course (coursecode, coursename, semester, year, collegecode, section) "
 					+ "VALUES ('CS591', 'OOD', 'Fall', 2019, 'CAS', 'A1')");
-			//fake category data
 			ResultSet rs = stmt.executeQuery("SELECT MAX(courseid) AS id FROM Course");
 			int lastid = 0;
 			if(rs.next()) {
 				lastid = rs.getInt("id");
 			}
 			String courseid = Integer.toString(lastid);
+			
+			//fake enrollment data
+			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
+					+ "VALUES ('U12344456', " + courseid + ")");
+			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
+					+ "VALUES ('U77094012', " + courseid + ")");
+			
+			//fake category data
 			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
 					+ "VALUES (" + courseid + ", 0.4, 0.4, 'Assignment', 0)");
 			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
@@ -104,25 +115,23 @@ public class Database {
 					+ "VALUES ('U12344456', " + courseid + ", 'Assignment2', 16.0)");
 			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
 					+ "VALUES ('U12344456', " + courseid + ", 'Final', 8.0)");
-			//fake enrollment data
-			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
-					+ "VALUES ('U12344456', " + courseid + ")");
-			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
-					+ "VALUES ('U77094012', " + courseid + ")");
+			
 			
 			conn.commit();
 			
 		}catch(Exception e){ 
 			System.out.println(e);
 		}finally {
-			if (stmt != null) stmt.close();
-			conn.setAutoCommit(true);
+			try {
+				if (stmt != null) stmt.close();
+				conn.setAutoCommit(true);
+			}catch(Exception e) {}
 		}
 	}
 	
 
 	//use it to load the newest data from SQL database to this.studentList and this.courseList
-	public void updateDB() throws SQLException {
+	public void updateDB() {
 		Connection conn = this.conn;
 		this.studentList = new ArrayList<Student>();
 		this.courseList = new ArrayList<Course>();
@@ -261,12 +270,15 @@ public class Database {
 		}catch(Exception e){
 			System.out.println(e);
 		}finally {
-			if (stmt != null) stmt.close();
-			if (stmt2 != null) stmt2.close();
-			if (stmt3 != null) stmt3.close();
-			if (stmt4 != null) stmt4.close();
-			if (stmt5 != null) stmt5.close();
-			if (stmt6 != null) stmt6.close();
+			try {
+				if (stmt != null) stmt.close();
+				if (stmt2 != null) stmt2.close();
+				if (stmt3 != null) stmt3.close();
+				if (stmt4 != null) stmt4.close();
+				if (stmt5 != null) stmt5.close();
+				if (stmt6 != null) stmt6.close();
+			}catch(Exception e) {}
+			
 		}
 			  
 	}
@@ -289,125 +301,315 @@ public class Database {
 		return null;
 	}
 	
-	//add a single graduate student to database
-	public boolean AddGraduateStudent(Student s) throws SQLException {
-		Statement stmt = null;
+	//add a single student to database
+	public boolean AddStudent(Student s) {
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
-					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', 'G', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
+			stmt=conn.prepareStatement("INSERT INTO Student (buid, fname, lname, mname, stu_type, major, college, gpa) "
+					+ "VALUES (?,?,?,?,?,?,?,?)");
+			stmt.setString(1, s.getBuid());
+			stmt.setString(2, s.getName().getFirstName());
+			stmt.setString(3, s.getName().getLastName());
+			stmt.setString(4, s.getName().getMiddleName());
+			stmt.setString(5, s.getType());
+			stmt.setString(6, s.getMajor());
+			stmt.setString(7, s.getCollege());
+			stmt.setDouble(8, s.getGpa());
+			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
 	}
 	
-	//add a single undergraduate student to database
-	public boolean AddUnderGraduateStudent(Student s) throws SQLException {
-		Statement stmt = null;
+	//add student with duplicate check
+	public boolean AddStudentWithCheck(Student s){
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
-					+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', 'UG', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
-			return true;
+			stmt=conn.prepareStatement("SELECT * from Student where buid = ?");
+			stmt.setString(1, s.getBuid());
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				return false;
+			}else {
+				AddStudent(s);
+				return true;
+			}
+
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
+		
 	}
 	
 	//add a course to database, without category
-	public boolean AddCourse(Course c) throws SQLException {
-		Statement stmt = null;
+	public boolean AddCourse(Course c) {
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Course (coursecode, semester, coursename, collegecode, year, section) "
-					+ "VALUES ('" + c.getCourseName().getCode() + "', '" + c.getCourseName().getSemester() + "', '" + c.getCourseName().getName() + "', '" + c.getCourseName().getCollege() + "', " + c.getCourseName().getYear() + ", '" + c.getCourseName().getSection() + "')");
+			stmt=conn.prepareStatement("INSERT INTO Course (coursecode, semester, coursename, collegecode, year, section) "
+					+ "VALUES (?,?,?,?,?,?)");
+			stmt.setString(1, c.getCourseName().getCode());
+			stmt.setString(2, c.getCourseName().getSemester());
+			stmt.setString(3, c.getCourseName().getName());
+			stmt.setString(4, c.getCourseName().getCollege());
+			stmt.setString(5, c.getCourseName().getYear());
+			stmt.setString(6, c.getCourseName().getSection());
+			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null)stmt.close();
+			} catch (Exception e) {}
 		}
 	}
 	
 	//add a category to database, must provide the courseid to indicate which course it belongs to.
-	public boolean AddCategory(Category c, int courseid) throws SQLException {
-		Statement stmt = null;
+	public boolean AddCategory(Category c, int courseid){
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
-					+ "VALUES (" + courseid + ", " + c.getGWeight() + ", " + c.getUgWeight() + ", '" + c.getCategoryName() + "', " + c.getCategorySeq() + ")");
+			stmt=conn.prepareStatement("INSERT INTO Category (courseid, gweight, ugweight, categoryname, categoryseq) "
+					+ "VALUES (?,?,?,?,?)");
+			stmt.setInt(1, courseid);
+			stmt.setDouble(2, c.getGWeight());
+			stmt.setDouble(3, c.getUgWeight());
+			stmt.setString(4, c.getCategoryName());
+			stmt.setInt(5, c.getCategorySeq());
+			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
 	}
 	
-	
-	
-	
+	//Change category weight, must specify which type of student
+	public boolean updateCategoryWeight(String type, int courseid, String categoryname, double newWeight) {
+		Statement stmt = null;
+		try {
+			stmt=conn.createStatement();
+			stmt.executeUpdate("UPDATE Category SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND categoryname = '" + categoryname + "'");
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+		
+	}
 	
 	//add an assignment to database, must provide the courseid and categoryname to indicate which course it belongs to and which category it belongs to.
-	public boolean AddAssignment(Assignment a, int courseid, String categoryname) throws SQLException {
-		Statement stmt = null;
+	public boolean AddAssignment(Assignment a, int courseid, String categoryname) {
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
-					+ "VALUES (" + courseid + ", " + a.getGWeight() + ", " + a.getUgWeight() + ", '" + a.getAssignmentName() + "', " + a.getAssignmentSeq() + ", '" + categoryname + "', " + a.getMaxScore() + ", " + a.getCurvedScore() + ")");
+			stmt=conn.prepareStatement("INSERT INTO Assignment (courseid, gweight, ugweight, assignmentname, assignmentseq, categoryname, maxraw, curve) "
+					+ "VALUES (?,?,?,?,?,?,?,?)");
+			stmt.setInt(1, courseid);
+			stmt.setDouble(2, a.getGWeight());
+			stmt.setDouble(3, a.getUgWeight());
+			stmt.setString(4, a.getAssignmentName());
+			stmt.setInt(5, a.getAssignmentSeq());
+			stmt.setString(6, categoryname);
+			stmt.setDouble(7, a.getMaxScore());
+			stmt.setDouble(8, a.getCurvedScore());
+			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
 	}
 	
-	//add a score to database, must provide the buid to specify which student, and courseid to specify which course, and assignmentname to specify which assignment.
-	public boolean AddScore(Score s, String buid, int courseid, String assignmentname) throws SQLException {
+	//update the weight of assignment, must specify with type of student
+	public boolean updateAssignmentWeight(String type, int courseid, String assignmentname, double newWeight){
 		Statement stmt = null;
 		try {
 			stmt=conn.createStatement();
-			stmt.executeUpdate("DELETE FROM AssignmentScore where buid = '" + buid + "' and courseid = " +courseid + " and assignmentname = '" + assignmentname + "'");
-			stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost, comment) "
-					+ "VALUES ('" + buid + "', " + courseid + ", '" + assignmentname + "', " + s.getPointsLost() + ", '" + s.getComment() + "')");
+			stmt.executeUpdate("UPDATE Assignment SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
+		
+	}
+	
+	
+	//Add a curve onto an assignment
+	public boolean updateCurve(int courseid, String assignmentname, double curve) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=conn.prepareStatement("UPDATE Assignment SET curve = ? WHERE courseid = ? AND assignmentname = ?");
+			stmt.setDouble(1, curve);
+			stmt.setInt(2, courseid);
+			stmt.setString(3, assignmentname);
+			stmt.executeUpdate();
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+		
+	}
+	
+	
+	//add a score to database, must provide the buid to specify which student, and courseid to specify which course, and assignmentname to specify which assignment.
+	public boolean AddScore(Score s, String buid, int courseid, String assignmentname) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=conn.prepareStatement("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost, comment) "
+					+ "VALUES (?,?,?,?,?)");
+			stmt.setString(1, buid);
+			stmt.setInt(2, courseid);
+			stmt.setString(3, assignmentname);
+			stmt.setDouble(4, s.getPointsLost());
+			stmt.setString(5, s.getComment());
+			stmt.executeUpdate();
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+	}
+	
+	//update a score, insert if not exist
+	public boolean updateScore(String buid, int courseid, String assignmentname, double pointslost){
+		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		try {
+			stmt=conn.prepareStatement("SELECT * from AssignmentScore where buid = ? AND courseid = ? AND assignmentname = ?");
+			stmt.setString(1, buid);
+			stmt.setInt(2, courseid);
+			stmt.setString(3, assignmentname);
+			ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				stmt2=conn.prepareStatement("UPDATE AssignmentScore SET pointslost = ? WHERE buid = ? AND courseid = ? AND assignmentname = ?");
+				stmt2.setDouble(1, pointslost);
+				stmt2.setString(2, buid);
+				stmt2.setInt(3, courseid);
+				stmt2.setString(4, assignmentname);
+				stmt2.executeUpdate();
+				return true;
+			}else {
+				stmt2=conn.prepareStatement("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
+						+ "VALUES (?,?,?,?)");
+				stmt2.setString(1, buid);
+				stmt2.setInt(2, courseid);
+				stmt2.setString(3, assignmentname);
+				stmt2.setDouble(4, pointslost);
+				stmt2.executeUpdate();
+				return true;
+			}
+
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+				if (stmt2 != null) stmt2.close();
+			}catch(Exception e) {}
+		}
+		
+	}
+	
+	//update a comment of a score
+	public boolean updateComment(String buid, int courseid, String assignmentname, String comment) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=conn.prepareStatement("UPDATE AssignmentScore SET comment = ? WHERE buid = ? AND courseid = ? AND assignmentname = ?");
+			stmt.setString(1, comment);
+			stmt.setString(2, buid);
+			stmt.setInt(3, courseid);
+			stmt.setString(4, assignmentname);
+			stmt.executeUpdate();
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+		
 	}
 	
 	//add an enrollment, use it when register a student to a course.
-	public boolean AddEnrollment(String buid, int courseid) throws SQLException {
-		Statement stmt = null;
+	public boolean AddEnrollment(String buid, int courseid){
+		PreparedStatement stmt = null;
 		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Enrollment (buid, courseid) "
-					+ "VALUES ('" + buid + "', " + courseid + ")");
+			stmt=conn.prepareStatement("INSERT INTO Enrollment (buid, courseid) VALUES (?,?)");
+			stmt.setString(1, buid);
+			stmt.setInt(2, courseid);
+			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
 		}
 	}
 	
+	//delete an enrollment, use it when delete registration of a student from a course.
+	public boolean deleteEnrollment(String buid, int courseid){
+		PreparedStatement stmt = null;
+		try {
+			stmt=conn.prepareStatement("DELETE FROM Enrollment where buid = ? and courseid = ?");
+			stmt.setString(1, buid);
+			stmt.setInt(2, courseid);
+			stmt.executeUpdate();
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+	}
 	
-	public boolean AddEverythingByCourse(Course c) throws SQLException {
+	//Add the course structure with a course object
+	public boolean AddEverythingByCourse(Course c) {
 		Statement stmt = null;
 		try {
 			conn.setAutoCommit(false);
@@ -422,11 +624,7 @@ public class Database {
 			c.setCourseId(lastid);
 			//add student
 			for(Student s: c.getStudentList()) {
-				if(s.getType().equals("G")) {
-					AddGraduateStudent(s);
-				}else {
-					AddUnderGraduateStudent(s);
-				}
+				AddStudent(s);
 			}
 			//add category
 			for(Category ca: c.getCategoryList()) {
@@ -438,14 +636,6 @@ public class Database {
 					AddAssignment(a, c.getCourseId(), ca.getCategoryName());
 				}
 			}
-			//add score
-			for(Category ca: c.getCategoryList()) {
-				for(Assignment a: ca.getAssignmentList()) {
-					for(Student s: a.getScoreList().keySet()) {
-						AddScore(a.getScoreList().get(s), s.getBuid(), c.getCourseId(), a.getAssignmentName());
-					}
-				}
-			}
 			//add enrollment
 			for(Student s: c.getStudentList()) {
 				AddEnrollment(s.getBuid(), c.getCourseId());
@@ -454,133 +644,20 @@ public class Database {
 			conn.commit();
 			return true;
 		}catch(Exception e) {
-			conn.rollback();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			System.out.println(e);
 			return false;
 		}finally {
-			if (stmt != null) stmt.close();
-			conn.setAutoCommit(true);
+			try {
+				if (stmt != null) stmt.close();
+				conn.setAutoCommit(true);
+			}catch(Exception e) {}
+			
 		}
 	}
 
-	public boolean updateComment(String buid, int courseid, String assignmentname, String comment) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE AssignmentScore SET comment = '" + comment + "' WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	public boolean updateScore(String buid, int courseid, String assignmentname, double pointslost) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * from AssignmentScore where buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
-			if(rs.next()) {
-				stmt.executeUpdate("UPDATE AssignmentScore SET pointslost = " + pointslost + " WHERE buid = '" + buid + "' AND courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
-			}else {
-				stmt.executeUpdate("INSERT INTO AssignmentScore (buid, courseid, assignmentname, pointslost) "
-						+ "VALUES ('" + buid + "', " + courseid + ", '" + assignmentname + "', " + pointslost + ")");
-				return true;
-			}
-			
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	public boolean updateCategoryWeight(String type, int courseid, String categoryname, double newWeight) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE Category SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND categoryname = '" + categoryname + "'");
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	public boolean updateAssignmentWeight(String type, int courseid, String assignmentname, double newWeight) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE Assignment SET "+ type +"weight = " + newWeight + " WHERE courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	public boolean AddSingleStudent(Student s) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * from Student where buid = '" + s.getBuid() + "'");
-			if(rs.next()) {
-				return false;
-			}else {
-				stmt.executeUpdate("INSERT INTO Student (buid, fname, lname, stu_type, major, college, gpa) "
-						+ "VALUES ('" + s.getBuid() + "', '" + s.getName().getFirstName() + "', '" + s.getName().getLastName() + "', '" + s.getType() + "', '" + s.getMajor() + "', '" + s.getCollege() + "', " + s.getGpa() + ")");
-				return true;
-			}
-
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	
-	public boolean updateCurve(int courseid, String assignmentname, double curve) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("UPDATE Assignment SET curve = " + curve + " WHERE courseid = " + courseid + " AND assignmentname = '" + assignmentname + "'");
-			
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-		
-	}
-	
-	public boolean deleteEnrollment(String buid, int courseid) throws SQLException {
-		Statement stmt = null;
-		try {
-			stmt=conn.createStatement();
-			stmt.executeUpdate("DELETE FROM Enrollment where buid = '" + buid + "' and courseid = " +courseid);
-			return true;
-		}catch(Exception e) {
-			System.out.println(e);
-			return false;
-		}finally {
-			if (stmt != null) stmt.close();
-		}
-	}
 }

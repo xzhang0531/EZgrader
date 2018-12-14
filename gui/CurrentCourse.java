@@ -55,7 +55,7 @@ public class CurrentCourse {
 		JComboBox comboBox = new JComboBox();
 		Database db = new Database();
 		try {
-			db.connect("root", "sss5533");
+			db.connect();
 
 			db.updateDB();
 			List<Course> course = db.courseList;

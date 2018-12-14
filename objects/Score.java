@@ -40,8 +40,6 @@ public class Score implements Comparable<Score>{
 		return !comment.equals("");
 	}
 
-
-
 	public double calculateScore(double maxScore) {
 		return maxScore - this.pointsLost;
 	}

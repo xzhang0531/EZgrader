@@ -101,12 +101,8 @@ public class ChangeWeightG {
 				}
 				for(String key:weightMap.keySet()) {
 					Database db = new Database();
-					db.connect("root", "sss5533");
-					try {
-						db.updateCategoryWeight("g", course.getCourseId(), key, weightMap.get(key));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					db.connect();
+					db.updateCategoryWeight("g", course.getCourseId(), key, weightMap.get(key));
 					
 				}
 				CourseDetail course = new CourseDetail();

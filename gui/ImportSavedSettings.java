@@ -55,7 +55,7 @@ public class ImportSavedSettings {
 		JComboBox comboBox = new JComboBox();
 		Database db = new Database();
 		try {
-			db.connect("root", "sss5533");
+			db.connect();
 
 			db.updateDB();
 			List<Course> courseList = db.courseList;

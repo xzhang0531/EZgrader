@@ -11,12 +11,10 @@ import objects.Score;
 public class DbTest {
 	public static void main(String[] args) throws SQLException {
 		Database db = new Database();
-		db.connect("root", "sss5533");
+		db.connect();
 		db.dropEntireDb();
 		db.insertFakeData();
 		db.updateDB();
-		
 
-		
 	}
 }

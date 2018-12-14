@@ -178,84 +178,79 @@ public class CourseDetail {
 			btn_printStat.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_printStat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						db.updateDB();
-						Course newestCourse = null;
-						for(Course c: db.courseList) {
-							if(c.getCourseId() == course.getCourseId()) {
-								newestCourse = c;
-								newestCourse.calculateFinalScore();
-							}
+					db.updateDB();
+					Course newestCourse = null;
+					for(Course c: db.courseList) {
+						if(c.getCourseId() == course.getCourseId()) {
+							newestCourse = c;
+							newestCourse.calculateFinalScore();
 						}
-						JDialog d = new JDialog(frame, "Statistic"); 
-						JPanel p = new JPanel();
-						p.setLayout(null);
-						
-						
-						JLabel lblPrintCourseStatistics = new JLabel("Course Stats for:");
-						JLabel lblNoStuLabel = new JLabel("Number of Students:");
-						JLabel lblFinalScoreAverage = new JLabel("Final Score Average:");
-						JLabel lblFinalScoreMedian = new JLabel("Final Score Median:");
-						JLabel lblMaximumScore = new JLabel("Maximum Score:");
-						JLabel lblMinimumScore = new JLabel("Minimum Score:");
-						JTextField courseNameText = new JTextField(newestCourse.getCourseName().getName());
-						JTextField sizeText = new JTextField(String.valueOf(newestCourse.getFinalScoreList().size()));
-						JTextField averageText = new JTextField(String.valueOf(newestCourse.calculateAverage()));
-						JTextField medianText = new JTextField(String.valueOf(newestCourse.calculateMedian()));
-						JTextField maximumText = new JTextField(String.valueOf(newestCourse.getMax()));
-						JTextField minimumText = new JTextField(String.valueOf(newestCourse.getMin()));
-
-						lblPrintCourseStatistics.setBounds(95, 20, 140, 26);
-						lblNoStuLabel.setBounds           (72, 65, 140, 16);
-						lblFinalScoreAverage.setBounds    (72, 105, 140, 16);
-						lblFinalScoreMedian.setBounds     (75, 145, 140, 16);
-						lblMaximumScore.setBounds         (94, 185, 140, 16);
-						lblMinimumScore.setBounds         (95, 225, 140, 16);
-						courseNameText.setBounds          (218, 20, 130, 26);
-						sizeText.setBounds                (218, 60, 130, 26);
-						averageText.setBounds             (218, 100, 130, 26);
-						medianText.setBounds              (218, 140, 130, 26);
-						maximumText.setBounds             (218, 180, 130, 26);
-						minimumText.setBounds             (218, 220, 130, 26);
-											
-						p.add(lblPrintCourseStatistics);						
-						p.add(lblNoStuLabel);
-						p.add(lblFinalScoreAverage);
-						p.add(lblFinalScoreMedian);
-						p.add(lblMaximumScore);
-						p.add(lblMinimumScore);
-						p.add(courseNameText);
-						p.add(sizeText);
-						p.add(averageText);
-						p.add(medianText);
-						p.add(maximumText);
-						p.add(minimumText);
-						
-						courseNameText.setEditable(false);
-						sizeText.setEditable(false);
-						averageText.setEditable(false);
-						medianText.setEditable(false);
-						maximumText.setEditable(false);
-						minimumText.setEditable(false);
-						
-
-						JButton btnBack = new JButton("Back");
-						btnBack.setBounds(170, 275, 75, 29);
-						btnBack.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								d.setVisible(false);
-							}
-						});
-						p.add(btnBack);
-						
-						d.add(p);
-						d.setLocation(400, 200);
-						d.setSize(450, 400); 
-						d.setVisible(true); 
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
 					}
+					JDialog d = new JDialog(frame, "Statistic"); 
+					JPanel p = new JPanel();
+					p.setLayout(null);
+					
+					
+					JLabel lblPrintCourseStatistics = new JLabel("Course Stats for:");
+					JLabel lblNoStuLabel = new JLabel("Number of Students:");
+					JLabel lblFinalScoreAverage = new JLabel("Final Score Average:");
+					JLabel lblFinalScoreMedian = new JLabel("Final Score Median:");
+					JLabel lblMaximumScore = new JLabel("Maximum Score:");
+					JLabel lblMinimumScore = new JLabel("Minimum Score:");
+					JTextField courseNameText = new JTextField(newestCourse.getCourseName().getName());
+					JTextField sizeText = new JTextField(String.valueOf(newestCourse.getFinalScoreList().size()));
+					JTextField averageText = new JTextField(String.valueOf(newestCourse.calculateAverage()));
+					JTextField medianText = new JTextField(String.valueOf(newestCourse.calculateMedian()));
+					JTextField maximumText = new JTextField(String.valueOf(newestCourse.getMax()));
+					JTextField minimumText = new JTextField(String.valueOf(newestCourse.getMin()));
+
+					lblPrintCourseStatistics.setBounds(95, 20, 140, 26);
+					lblNoStuLabel.setBounds           (72, 65, 140, 16);
+					lblFinalScoreAverage.setBounds    (72, 105, 140, 16);
+					lblFinalScoreMedian.setBounds     (75, 145, 140, 16);
+					lblMaximumScore.setBounds         (94, 185, 140, 16);
+					lblMinimumScore.setBounds         (95, 225, 140, 16);
+					courseNameText.setBounds          (218, 20, 130, 26);
+					sizeText.setBounds                (218, 60, 130, 26);
+					averageText.setBounds             (218, 100, 130, 26);
+					medianText.setBounds              (218, 140, 130, 26);
+					maximumText.setBounds             (218, 180, 130, 26);
+					minimumText.setBounds             (218, 220, 130, 26);
+										
+					p.add(lblPrintCourseStatistics);						
+					p.add(lblNoStuLabel);
+					p.add(lblFinalScoreAverage);
+					p.add(lblFinalScoreMedian);
+					p.add(lblMaximumScore);
+					p.add(lblMinimumScore);
+					p.add(courseNameText);
+					p.add(sizeText);
+					p.add(averageText);
+					p.add(medianText);
+					p.add(maximumText);
+					p.add(minimumText);
+					
+					courseNameText.setEditable(false);
+					sizeText.setEditable(false);
+					averageText.setEditable(false);
+					medianText.setEditable(false);
+					maximumText.setEditable(false);
+					minimumText.setEditable(false);
+					
+
+					JButton btnBack = new JButton("Back");
+					btnBack.setBounds(170, 275, 75, 29);
+					btnBack.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							d.setVisible(false);
+						}
+					});
+					p.add(btnBack);
+					
+					d.add(p);
+					d.setLocation(400, 200);
+					d.setSize(450, 400); 
+					d.setVisible(true);
 				}
 			});
 			Summarize.add(btn_printStat);
@@ -272,28 +267,23 @@ public class CourseDetail {
 			btn_calFinal.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_calFinal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						db.updateDB();
-						Course newestCourse = null;
-						for(Course c: db.courseList) {
-							if(c.getCourseId() == course.getCourseId()) {
-								newestCourse = c;
-								newestCourse.calculateFinalScore();
+					db.updateDB();
+					Course newestCourse = null;
+					for(Course c: db.courseList) {
+						if(c.getCourseId() == course.getCourseId()) {
+							newestCourse = c;
+							newestCourse.calculateFinalScore();
+						}
+					}
+					for(int i = 0; i < table.getRowCount(); i++) {
+						String buid = (String) table.getModel().getValueAt(i, 0);
+						for (Student student: newestCourse.getStudentList()) {
+							if(student.getBuid().equals(buid)) {
+								double finalScore = newestCourse.getFinalScoreList().get(student);
+								String score = String.format("%.2f", finalScore);
+								table.getModel().setValueAt(score, i, table.getColumnCount()-1);
 							}
 						}
-						for(int i = 0; i < table.getRowCount(); i++) {
-							String buid = (String) table.getModel().getValueAt(i, 0);
-							for (Student student: newestCourse.getStudentList()) {
-								if(student.getBuid().equals(buid)) {
-									double finalScore = newestCourse.getFinalScoreList().get(student);
-									String score = String.format("%.2f", finalScore);
-									table.getModel().setValueAt(score, i, table.getColumnCount()-1);
-								}
-							}
-						}
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
 					}
 				}
 			});
@@ -440,16 +430,11 @@ public class CourseDetail {
 							}
 						}
 					}
-					try {
-						db.updateScore(buid, courseid, assignmentname, Double.parseDouble(newVal));
-						db.updateDB();
-						Course newestCourse = db.getCourseById(courseid);
-						double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
-						dm.setValueAt(String.valueOf(newPercentage), row, column + 1);
-						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					db.updateScore(buid, courseid, assignmentname, Double.parseDouble(newVal));
+					db.updateDB();
+					Course newestCourse = db.getCourseById(courseid);
+					double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
+					dm.setValueAt(String.valueOf(newPercentage), row, column + 1);
 				}
 			}
 		};
@@ -467,7 +452,7 @@ public class CourseDetail {
 	
 	public void run() {
 		Database db = new Database();
-		db.connect("root", "sss5533");
+		db.connect();
 		CourseDetail cd = new CourseDetail();
 		cd.init(db);
 		cd.frame = new JFrame();

@@ -117,12 +117,8 @@ public class ChangeTypeWeightG {
 				}
 				for(String key:weightMap.keySet()) {
 					Database db = new Database();
-					db.connect("root", "sss5533");
-					try {
-						db.updateAssignmentWeight("g", courseid, key, weightMap.get(key));
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
+					db.connect();
+					db.updateAssignmentWeight("g", courseid, key, weightMap.get(key));
 					
 				}
 //				for (String s : weightMap.keySet()) {

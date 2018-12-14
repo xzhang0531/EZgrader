@@ -129,17 +129,13 @@ public class ButtonColumn extends AbstractCellEditor implements
 					}
 				}
 				Database db = new Database();
-				db.connect("root", "sss5533");
-				try {
-					db.updateComment(buid, course.getCourseId(), assignmentname, textArea.getText());
-					db.updateDB();
-					Course newestCourse = db.getCourseById(course.getCourseId());
-					String newComment = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getComment();
-					table.getModel().setValueAt(newComment, table.getSelectedRow(), table.getSelectedColumn());
-					d.setVisible(false);
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-				}
+				db.connect();
+				db.updateComment(buid, course.getCourseId(), assignmentname, textArea.getText());
+				db.updateDB();
+				Course newestCourse = db.getCourseById(course.getCourseId());
+				String newComment = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getComment();
+				table.getModel().setValueAt(newComment, table.getSelectedRow(), table.getSelectedColumn());
+				d.setVisible(false);
 				
 			}
 		});

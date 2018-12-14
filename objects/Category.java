@@ -61,18 +61,19 @@ public class Category implements Comparable<Category>{
 	public boolean addAssignment(Assignment assignment) {
 		return this.assignmentList.add(assignment);
 	}
+
 	public boolean deleteAssignment(Assignment assignment) {
 		return this.assignmentList.remove(assignment);
 	}
 	
-	public boolean weightEqualsCategoryWeight(){
+	public boolean weightEqualsOne(){
 		double sumOfGWeights = 0;
 		double sumOfUgWeights = 0;
 		for(Assignment assignment: this.assignmentList) {
 			sumOfGWeights += assignment.getGWeight();
 			sumOfUgWeights += assignment.getUgWeight();
 		}
-		if(sumOfGWeights == this.gWeight && sumOfUgWeights == this.ugWeight) {
+		if(sumOfGWeights == 1 && sumOfUgWeights == 1) {
 			return true;
 		}
 		else{

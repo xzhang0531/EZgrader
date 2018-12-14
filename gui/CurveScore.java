@@ -81,12 +81,8 @@ public class CurveScore {
 					for(Assignment assignment : category.getAssignmentList()) {
 						if(assignment.getAssignmentName().equals(assignmentDropDown.getSelectedItem())){
 							Database db = new Database();
-							db.connect("root", "sss5533");
-							try {
-								db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							}
+							db.connect();
+							db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
 						}
 					}
 				}

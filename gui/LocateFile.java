@@ -104,9 +104,8 @@ public class LocateFile {
 					
 				}
 				Database db =new Database();
-				db.connect("root", "sss5533");
+				db.connect();
 				try {
-					db.dropEntireDb();
 					db.updateDB();
 					db.AddEverythingByCourse(course);
 					frame.dispose();

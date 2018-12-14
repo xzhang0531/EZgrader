@@ -46,12 +46,8 @@ public class BuidColumn extends AbstractCellEditor implements
 		this.table = table;
 		this.frame = frame;
 		this.db = new Database();
-		try {
-			db.connect("root", "sss5533");
-			db.updateDB();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		db.connect();
+		db.updateDB();
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);

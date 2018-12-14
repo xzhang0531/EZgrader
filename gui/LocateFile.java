@@ -61,18 +61,18 @@ public class LocateFile {
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblLocation = new JLabel("Location");
-		lblLocation.setBounds(59, 83, 61, 16);
+		JLabel lblLocation = new JLabel("Location:");
+		lblLocation.setBounds(29, 83, 80, 16);
 		panel.add(lblLocation);
 		
 		txtFileLocationHere = new JTextField();
 		txtFileLocationHere.setText("");
-		txtFileLocationHere.setBounds(116, 78, 130, 26);
+		txtFileLocationHere.setBounds(116, 78, 130, 29);
 		panel.add(txtFileLocationHere);
 		txtFileLocationHere.setColumns(10);
 		
-		JButton btnUploadStudentsTo = new JButton("Upload Students to Course");
-		btnUploadStudentsTo.setBounds(118, 134, 200, 29);
+		JButton btnUploadStudentsTo = new JButton("Upload Students");
+		btnUploadStudentsTo.setBounds(118, 134, 240, 29);
 		panel.add(btnUploadStudentsTo);
 		btnUploadStudentsTo.setVisible(false);
 		
@@ -88,7 +88,7 @@ public class LocateFile {
 				frame.revalidate();
 			}
 		});
-		btnBrowseComputer.setBounds(250, 78, 142, 29);
+		btnBrowseComputer.setBounds(250, 78, 170, 29);
 		panel.add(btnBrowseComputer);
 		
 

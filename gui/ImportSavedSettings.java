@@ -20,32 +20,12 @@ public class ImportSavedSettings {
 
 	protected JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ImportSavedSettings window = new ImportSavedSettings();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}	 
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public ImportSavedSettings(Course course) {
 		initialize(course);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(Course course) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 683, 507);
@@ -65,7 +45,7 @@ public class ImportSavedSettings {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		comboBox.setBounds(83, 109, 219, 114);
+		comboBox.setBounds(83, 109, 219, 60);
 		frame.getContentPane().add(comboBox);
 		
 		JLabel lblCurrentCourses = new JLabel("Select the Course Setting You Want");

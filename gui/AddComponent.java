@@ -49,15 +49,15 @@ public class AddComponent {
 		for (Category category : course.getCategoryList()) {
 			comboBox.addItem(category.getCategoryName());
 		}
-		comboBox.setBounds(148, 183, 167, 34);
+		comboBox.setBounds(140, 183, 167, 34);
 		frame.getContentPane().add(comboBox);
 		
 		JLabel lblAddComponent = new JLabel("Selete The Component You Want To Use");
 		lblAddComponent.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-		lblAddComponent.setBounds(143, 63, 404, 53);
+		lblAddComponent.setBounds(120, 63, 450, 53);
 		frame.getContentPane().add(lblAddComponent);
 		textField = new JTextField();
-		textField.setBounds(442, 186, 130, 26);
+		textField.setBounds(370, 183, 130, 34);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
@@ -81,7 +81,6 @@ public class AddComponent {
 							
 
 						}
-						db.disconnect();
 						frame.dispose();
 						CourseDetail cd = new CourseDetail();
 						cd.run(course.getCourseId());
@@ -98,11 +97,23 @@ public class AddComponent {
 		btnNewButton.setBounds(156, 304, 117, 29);
 		frame.getContentPane().add(btnNewButton);
 		
-
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(380, 304, 117, 29);
+		frame.getContentPane().add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail cd = new CourseDetail();
+				cd.run(course.getCourseId());
+				
+			}
+		});
+		
+		
 		
 		JLabel lblNewLabel = new JLabel("Max Score");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		lblNewLabel.setBounds(451, 149, 107, 29);
+		lblNewLabel.setBounds(370, 149, 107, 29);
 		frame.getContentPane().add(lblNewLabel);
 	}
 }

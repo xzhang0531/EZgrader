@@ -1,9 +1,9 @@
 package gui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
@@ -15,7 +15,6 @@ import objects.Course;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class CurveScore {
@@ -23,25 +22,7 @@ public class CurveScore {
 	public JFrame frame;
 	private JTextField textField;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					CurveScore window = new CurveScore();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public CurveScore(Course course) {
 		initialize(course);
 	}
@@ -70,13 +51,20 @@ public class CurveScore {
 		}
 		
 		
-		JButton btnAddCurveTo = new JButton("Add Curve to Scores");
+		JButton btnAddCurveTo = new JButton("Add Curve");
 		btnAddCurveTo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				//take in score and add to score in database
 				String newCurve = textField.getText();
-				double curve = Double.parseDouble(newCurve);
+				double curve;
+				try {
+					curve = Double.parseDouble(newCurve);
+				}catch(Exception e1) {
+					JOptionPane.showMessageDialog(frame, "Invalid value!");
+					return;
+				}
+				
 				for(Category category: course.getCategoryList()) {
 					for(Assignment assignment : category.getAssignmentList()) {
 						if(assignment.getAssignmentName().equals(assignmentDropDown.getSelectedItem())){
@@ -94,12 +82,26 @@ public class CurveScore {
 				frame2.run(course.getCourseId());
 			}
 		});
-		btnAddCurveTo.setBounds(208, 195, 153, 29);
+		btnAddCurveTo.setBounds(80, 195, 117, 29);
 		frame.getContentPane().add(btnAddCurveTo);
+		
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setBounds(240, 195, 117, 29);
+		frame.getContentPane().add(btnCancel);
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail cd = new CourseDetail();
+				cd.run(course.getCourseId());
+				
+			}
+		});
+		
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(271, 88, 54, 26);
+		textField.setBounds(271, 89, 54, 27);
 		frame.getContentPane().add(textField);
 	}
 }

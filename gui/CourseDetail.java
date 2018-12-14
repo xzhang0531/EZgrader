@@ -161,7 +161,6 @@ public class CourseDetail {
 					frame.dispose();
 					Login l = new Login();
 					l.frame.setVisible(true);
-					db.disconnect();
 				}
 			});
 			
@@ -175,7 +174,6 @@ public class CourseDetail {
 					frame.dispose();
 					Welcome w = new Welcome();
 					w.frame.setVisible(true);
-					db.disconnect();
 				}
 			});
 			
@@ -407,7 +405,7 @@ public class CourseDetail {
 				cm.getColumn(i).setPreferredWidth(16);
 				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
 			}else {
-				cm.getColumn(i).setPreferredWidth(100);
+				cm.getColumn(i).setPreferredWidth(105);
 				table.getColumnModel().getColumn(i).setCellRenderer( rightRenderer );
 			}
 			

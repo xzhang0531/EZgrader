@@ -5,6 +5,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.ImageIcon;
@@ -61,7 +63,7 @@ public class Login {
 		frame.getContentPane().add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setBounds(310, 214, 167, 29);
+		textField.setBounds(310, 214, 167, 33);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
@@ -96,11 +98,14 @@ public class Login {
 		
 
 		
+		ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/BU.PNG");
+		Image image = imageIcon.getImage();
+		Image newimg = image.getScaledInstance(200, 90,  java.awt.Image.SCALE_SMOOTH);
+		imageIcon = new ImageIcon(newimg);
 		
-		ImageIcon image = new ImageIcon("./image/BU.jpg");
-		JLabel lblNewLabel_1 = new JLabel(image);
+		JLabel lblNewLabel_1 = new JLabel(imageIcon);
 		
-		lblNewLabel_1.setBounds(230, 30, image.getIconWidth(), image.getIconHeight());
+		lblNewLabel_1.setBounds(285, 30, imageIcon.getIconWidth(), imageIcon.getIconHeight());
 		frame.getContentPane().add(lblNewLabel_1);
 		
 

@@ -36,13 +36,6 @@ public class Database {
 		}
 	}
 	
-	public void disconnect() {
-		try {
-			this.conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	//use it when you want to wipe out all data from database.
 	public void dropEntireDb() {
@@ -674,7 +667,9 @@ public class Database {
 		try {
 			stmt = stmt=conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT MAX(courseid) AS id FROM Course");
-			return rs.getInt("id");
+			while(rs.next()) {
+				return rs.getInt("id");
+			}
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}finally {

@@ -1,12 +1,8 @@
 package gui;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -15,6 +11,8 @@ import objects.Category;
 import objects.Course;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -26,32 +24,12 @@ public class EditComponents {
 
 	JFrame frame;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					editComponents window = new editComponents();
-//					window.frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
-	/**
-	 * Create the application.
-	 */
 	public EditComponents(Course course) {
 		initialize(course);
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+
 	private void initialize(Course course) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 900, 600);
@@ -59,13 +37,13 @@ public class EditComponents {
 		frame.getContentPane().setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(54, 81, 258, 314);
+		panel.setBounds(54, 81, 270, 314);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		panel.setVisible(false);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(332, 81, 258, 314);
+		panel_1.setBounds(332, 81, 270, 350);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(null);
 		panel_1.setVisible(false);
@@ -85,9 +63,10 @@ public class EditComponents {
 		btnEditCourseComponents.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panel.setVisible(true);
+				btnEditCourseComponents.setVisible(false);
 			}
 		});
-		btnEditCourseComponents.setBounds(44, 43, 180, 29);
+		btnEditCourseComponents.setBounds(44, 43, 220, 29);
 		frame.getContentPane().add(btnEditCourseComponents);
 		
 		JRadioButton rdbtnHomework = new JRadioButton("Homework");
@@ -169,14 +148,16 @@ public class EditComponents {
 			}
 		});
 		
-		btnSetWeights.setBounds(6, 279, 130, 29);
+		btnSetWeights.setBounds(0, 279, 130, 29);
 		panel.add(btnSetWeights);
 		
 		JButton btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(135, 279, 117, 29);
+		btnCancel.setBounds(135, 279, 130, 29);
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panel.setVisible(false);
+				frame.dispose();
+				Welcome w = new Welcome();
+				w.frame.setVisible(true);
 			}
 		});
 		panel.add(btnCancel);
@@ -188,27 +169,20 @@ public class EditComponents {
 		panel_1.add(lblSetWeightsFor);
 		
 		JButton button = new JButton("Cancel");
-		button.setBounds(115, 279, 117, 29);
+		button.setBounds(0, 299, 180, 29);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panel_1.setVisible(false);
+				frame.dispose();
+				Welcome w = new Welcome();
+				w.frame.setVisible(true);
 			}
 		});
 		panel_1.add(button);
 		
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panel_2.removeAll();
-				panel_1.setVisible(false);
-				panel.setVisible(true);
-			}
-		});
-		btnBack.setBounds(6, 279, 117, 29);
-		panel_1.add(btnBack);
+
 		
 		JLabel lblPleaseUseDecimal = new JLabel("Please use decimal units (i.e. /1.00)");
-		lblPleaseUseDecimal.setBounds(6, 51, 231, 16);
+		lblPleaseUseDecimal.setBounds(0, 51, 269, 16);
 		panel_1.add(lblPleaseUseDecimal);
 		
 		List<String> Weights = new LinkedList<>();
@@ -217,6 +191,7 @@ public class EditComponents {
 		btnFinalizeChanges.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int count = panel_2.getComponentCount();
+				double totalWeight = 0;
 			    for(String title : Weight) {
 			    		for (int i = 0; i < count; i++) {
 			    			Object obj = panel_2.getComponent(i);
@@ -224,9 +199,23 @@ public class EditComponents {
 				    			JTextField text = (JTextField) obj;
 				    			if (text.getName().equals(title)) {
 				    				weightPair.add(new String[] {title, text.getText()});
+				    				try {
+				    					totalWeight += Double.parseDouble(text.getText());
+				    				}catch(Exception e1) {
+				    					JOptionPane.showMessageDialog(frame, "Invalid values");
+				    					weightPair.removeAll(weightPair);
+				    			    	return;
+				    				}
+				    				
 				    			}
 				    		}
 			    		}
+			    }
+			    
+			    if(totalWeight != 1.0) {
+			    	JOptionPane.showMessageDialog(frame, "Weights must add up to one!");
+			    	weightPair.removeAll(weightPair);
+			    	return;
 			    }
 				
 				List<String> checkedOff = new ArrayList<String>();
@@ -273,16 +262,14 @@ public class EditComponents {
 
 				}
 				
-
-//				Assignment assignment = new Assignment(label_ms.getText(), Weight.get(index)[0], Double.valueOf(Weight.get(index)[1]), Double.valueOf(jfield_ms.getInputContext().toString()));
-				
+			
 				panel_1.setVisible(false);
 				panel_3.setVisible(true);
 				
-				//set weights assignments
+
 			}
 		});
-		btnFinalizeChanges.setBounds(6, 257, 195, 29);
+		btnFinalizeChanges.setBounds(0, 263, 180, 29);
 		panel_1.add(btnFinalizeChanges);
 		
 		
@@ -292,7 +279,7 @@ public class EditComponents {
 		panel_3.add(lblMaxScore);
 		
 		JLabel lblInitializeTheFirst = new JLabel("Initialize the first assignments ");
-		lblInitializeTheFirst.setBounds(6, 51, 196, 22);
+		lblInitializeTheFirst.setBounds(6, 51, 246, 22);
 		panel_3.add(lblInitializeTheFirst);
 		
 		JButton btnFinalizeChanges_1 = new JButton("Add Students");
@@ -312,11 +299,7 @@ public class EditComponents {
 				    		}
 			    		}
 			    }
-//			    
-//				System.out.println(scorePair.get(0)[0]);
-//				System.out.println(scorePair.get(0)[1]);
-//				System.out.println(weightPair.get(0)[0]);
-//				System.out.println(weightPair.get(0)[1]);
+
 			    int index = 0;
 				for (String[] cur: weightPair) {
 					Category category = new Category(cur[0], 0, Double.parseDouble(cur[1]), Double.parseDouble(cur[1]));
@@ -328,14 +311,7 @@ public class EditComponents {
 				for (Category category : components) {
 					course.addCategory(category);
 				}
-//				for (Category category : course.getCategoryList()) {
-//					for (Assignment assignment : category.getAssignmentList()) {
-//						System.out.println(assignment.getGWeight());
-//						System.out.println(assignment.getAssignmentName());
-//						System.out.println(assignment.getMaxScore());
-//						
-//					}
-//				}
+
 				frame.dispose();
 				AddStudent frame2 = new AddStudent(course);
 				frame2.frame.setVisible(true);

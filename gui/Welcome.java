@@ -55,7 +55,7 @@ public class Welcome {
 				frame2.frame.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(414, 116, 170, 49);
+		btnNewButton.setBounds(414, 120, 180, 40);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnCurrentCourse = new JButton("Current Course");
@@ -66,7 +66,7 @@ public class Welcome {
 				frame2.frame.setVisible(true);
 			}
 		});
-		btnCurrentCourse.setBounds(414, 193, 170, 49);
+		btnCurrentCourse.setBounds(414, 200, 180, 40);
 		frame.getContentPane().add(btnCurrentCourse);
 		
 		JButton btnLogout = new JButton("Logout");
@@ -77,7 +77,7 @@ public class Welcome {
 				frame2.frame.setVisible(true);
 			}
 		});
-		btnLogout.setBounds(414, 277, 170, 49);
+		btnLogout.setBounds(414, 280, 180, 40);
 		frame.getContentPane().add(btnLogout);
 		
 		JLabel lblWelcomeProfessor = new JLabel("Welcome Professor!");
@@ -85,7 +85,7 @@ public class Welcome {
 		lblWelcomeProfessor.setBounds(72, 50, 253, 49);
 		frame.getContentPane().add(lblWelcomeProfessor);
 		
-		ImageIcon image = new ImageIcon("./image/Thank.png");
+		ImageIcon image = new ImageIcon("/home/xzhang/EZgrader/gui/img/Thank.png");
 		JLabel lblNewLabel = new JLabel(image);
 		lblNewLabel.setBounds(65, 105, image.getIconWidth(), image.getIconHeight());
 		frame.getContentPane().add(lblNewLabel);

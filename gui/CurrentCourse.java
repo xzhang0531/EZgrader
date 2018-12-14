@@ -65,7 +65,7 @@ public class CurrentCourse {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		comboBox.setBounds(83, 109, 219, 114);
+		comboBox.setBounds(83, 109, 219, 50);
 		frame.getContentPane().add(comboBox);
 		
 		JLabel lblCurrentCourses = new JLabel("Current Courses");

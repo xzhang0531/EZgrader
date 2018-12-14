@@ -36,6 +36,14 @@ public class Database {
 		}
 	}
 	
+	public void disconnect() {
+		try {
+			this.conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//use it when you want to wipe out all data from database.
 	public void dropEntireDb() {
 		Connection conn = this.conn;
@@ -659,5 +667,21 @@ public class Database {
 			
 		}
 	}
-
+	
+	//get the largest current courseid
+	public int getLargestCid() {
+		Statement stmt = null;
+		try {
+			stmt = stmt=conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT MAX(courseid) AS id FROM Course");
+			return rs.getInt("id");
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+		return 0;
+	}
 }

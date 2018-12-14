@@ -129,7 +129,7 @@ public class ChangeTypeWeightG {
 //				}
 				CourseDetail course = new CourseDetail();
 				frame.dispose();
-				course.run();
+				course.run(courseid);
 			}});
 		panel.add(change);
 //		Database db = new Database();

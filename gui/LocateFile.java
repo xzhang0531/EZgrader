@@ -110,7 +110,7 @@ public class LocateFile {
 					db.AddEverythingByCourse(course);
 					frame.dispose();
 					CourseDetail cd = new CourseDetail();
-					cd.run();
+					cd.run(db.getLargestCid());
 					
 				}catch(Exception err) {
 					err.printStackTrace();;

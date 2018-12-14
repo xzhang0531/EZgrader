@@ -44,7 +44,7 @@ public class DeleteStudent {
 				
 				frame.dispose();
 				CourseDetail c = new CourseDetail();
-				c.run();
+				c.run(course.getCourseId());
 			}
 		});
 		panel.add(btn_delete);
@@ -56,7 +56,7 @@ public class DeleteStudent {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				CourseDetail c = new CourseDetail();
-				c.run();
+				c.run(course.getCourseId());
 			}
 		});
 		panel.add(btn_cancel);

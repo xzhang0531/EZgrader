@@ -105,9 +105,9 @@ public class ChangeWeightG {
 					db.updateCategoryWeight("g", course.getCourseId(), key, weightMap.get(key));
 					
 				}
-				CourseDetail course = new CourseDetail();
+				CourseDetail c = new CourseDetail();
 				frame.dispose();
-				course.run();
+				c.run(course.getCourseId());
 			}});
 		panel.add(change);
 //		Database db = new Database();

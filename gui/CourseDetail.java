@@ -50,7 +50,7 @@ public class CourseDetail {
 	
 
 	
-	public void init(Database db) {
+	public void init(Database db, int cid) {
 		try {
 			db.updateDB();
 		}catch(Exception e) {
@@ -62,7 +62,7 @@ public class CourseDetail {
 			//add tab
 			JPanel currentCoursePanel = new JPanel();
 			jTabbedpane.addTab(course.getCourseName().getCode(), currentCoursePanel);
-			
+			if(course.getCourseId() == cid) jTabbedpane.setSelectedComponent(currentCoursePanel);
 			//control panels
 			
 			JPanel Settings = new JPanel();
@@ -79,6 +79,12 @@ public class CourseDetail {
 			Summarize.setBounds(314, 10, 136, 90);
 			Summarize.setBorder(BorderFactory.createTitledBorder(blackline, "Summarize Data"));
 			currentCoursePanel.add(Summarize);
+			
+			JPanel Command = new JPanel();
+			Command.setLayout(null);
+			Command.setBounds(459, 10, 136, 90);
+			Command.setBorder(BorderFactory.createTitledBorder(blackline, "Command"));
+			currentCoursePanel.add(Command);
 			
 			//add buttons
 			
@@ -146,17 +152,33 @@ public class CourseDetail {
 				}
 			});
 			
-			JButton btn_deleteComponent = new JButton("Delete Component");
-			btn_deleteComponent.setBounds(10, 50, 117, 25);
-			btn_deleteComponent.setFont(new Font("Arial", Font.BOLD, 9));
-			Settings.add(btn_deleteComponent);
-			btn_deleteComponent.addActionListener(new ActionListener() {
+			JButton btn_logout = new JButton("Logout");
+			btn_logout.setBounds(10, 50, 117, 25);
+			btn_logout.setFont(new Font("Arial", Font.BOLD, 9));
+			Command.add(btn_logout);
+			btn_logout.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					frame.dispose();
-
-					
+					Login l = new Login();
+					l.frame.setVisible(true);
+					db.disconnect();
 				}
 			});
+			
+			
+			JButton btn_back = new JButton("Back");
+			btn_back.setBounds(10, 20, 117, 25);
+			btn_back.setFont(new Font("Arial", Font.BOLD, 9));
+			Command.add(btn_back);
+			btn_back.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					Welcome w = new Welcome();
+					w.frame.setVisible(true);
+					db.disconnect();
+				}
+			});
+			
 		
 			JButton btn_changeweight = new JButton("Change Weight");
 			btn_changeweight.addActionListener(new ActionListener() {
@@ -166,7 +188,7 @@ public class CourseDetail {
 					frame2.frame.setVisible(true);
 				}
 			});
-			btn_changeweight.setBounds(130, 50, 117, 25);
+			btn_changeweight.setBounds(10, 50, 117, 25);
 			btn_changeweight.setFont(new Font("Arial", Font.BOLD, 9));
 			Settings.add(btn_changeweight);
 			
@@ -450,11 +472,11 @@ public class CourseDetail {
 		return table;
 	}
 	
-	public void run() {
+	public void run(int cid) {
 		Database db = new Database();
 		db.connect();
 		CourseDetail cd = new CourseDetail();
-		cd.init(db);
+		cd.init(db, cid);
 		cd.frame = new JFrame();
 		cd.frame.setContentPane(cd.jTabbedpane);
 		cd.frame.setSize(1300, 900);
@@ -466,7 +488,7 @@ public class CourseDetail {
 
 	public static void main(String[] args) {
 		CourseDetail cd = new CourseDetail();
-		cd.run();
+		cd.run(11);
 
 	}
 }

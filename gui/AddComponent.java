@@ -78,11 +78,13 @@ public class AddComponent {
 						for(Assignment a: category.getAssignmentList()) {
 							db.updateAssignmentWeight("g", course.getCourseId(), a.getAssignmentName(), weight);
 							db.updateAssignmentWeight("ug", course.getCourseId(), a.getAssignmentName(), weight);
-							frame.dispose();
-							CourseDetail cd = new CourseDetail();
-							cd.run();
+							
 
 						}
+						db.disconnect();
+						frame.dispose();
+						CourseDetail cd = new CourseDetail();
+						cd.run(course.getCourseId());
 						
 						
 						

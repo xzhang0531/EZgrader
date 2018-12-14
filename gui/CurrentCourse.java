@@ -60,7 +60,7 @@ public class CurrentCourse {
 			db.updateDB();
 			List<Course> course = db.courseList;
 			for (Course cur : course) {
-				comboBox.addItem(cur.getCourseName().getCode() +" " +cur.getCourseName().getName());
+				comboBox.addItem(new ComboItem(cur.getCourseId(), cur.getCourseName().getCode() +" " +cur.getCourseName().getName()));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -75,6 +75,15 @@ public class CurrentCourse {
 		
 		JButton btnNewButton = new JButton("Enter Course");
 		btnNewButton.setBounds(88, 263, 138, 39);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				CourseDetail cd = new CourseDetail();
+				ComboItem item = (ComboItem) comboBox.getSelectedItem();
+				cd.run(item.getValue());
+			}
+		});
+		
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnBack = new JButton("Back");
@@ -88,4 +97,27 @@ public class CurrentCourse {
 		btnBack.setBounds(335, 263, 138, 39);
 		frame.getContentPane().add(btnBack);
 	}
+}
+
+class ComboItem {
+    private int value;
+    private String label;
+
+    public ComboItem(int value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+
+    public String getLabel() {
+        return this.label;
+    }
+
+    @Override
+    public String toString() {
+        return label;
+    }
 }

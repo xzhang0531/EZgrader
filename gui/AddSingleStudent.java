@@ -94,7 +94,7 @@ public class AddSingleStudent {
 				
 				frame.dispose();
 				CourseDetail c = new CourseDetail();
-				c.run();
+				c.run(course.getCourseId());
 			}
 		});
 		panel.add(btn_add);
@@ -106,7 +106,7 @@ public class AddSingleStudent {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 				CourseDetail c = new CourseDetail();
-				c.run();
+				c.run(course.getCourseId());
 			}
 		});
 		panel.add(btn_cancel);

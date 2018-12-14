@@ -91,7 +91,7 @@ public class CurveScore {
 				//then
 				frame.dispose();
 				CourseDetail frame2 = new CourseDetail();
-				frame2.run();
+				frame2.run(course.getCourseId());
 			}
 		});
 		btnAddCurveTo.setBounds(208, 195, 153, 29);

@@ -55,7 +55,7 @@ public class Login {
 		lblEzGrader.setBounds(310, 136, 194, 65);
 		frame.getContentPane().add(lblEzGrader);
 		
-		JLabel lblNewLabel = new JLabel("UserName :");
+		JLabel lblNewLabel = new JLabel("Username :");
 		lblNewLabel.setFont(new Font("Lao Sangam MN", Font.PLAIN, 16));
 		lblNewLabel.setBounds(176, 210, 111, 33);
 		frame.getContentPane().add(lblNewLabel);
@@ -65,7 +65,7 @@ public class Login {
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
 		
-		JLabel lblPassword = new JLabel("PassWord :");
+		JLabel lblPassword = new JLabel("Password :");
 		lblPassword.setFont(new Font("Lao Sangam MN", Font.PLAIN, 16));
 		lblPassword.setBounds(176, 276, 111, 33);
 		frame.getContentPane().add(lblPassword);

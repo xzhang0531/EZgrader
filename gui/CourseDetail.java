@@ -34,8 +34,8 @@ import javax.swing.table.TableColumnModel;
 
 import db.Database;
 import gui.lib.BuidColumn;
-import gui.lib.ButtonColumn;
 import gui.lib.ColumnGroup;
+import gui.lib.CommentColumn;
 import gui.lib.GroupableTableHeader;
 import gui.lib.TableCellListener;
 import objects.Assignment;
@@ -442,7 +442,7 @@ public class CourseDetail {
 		//comment column
 		
 		for(int i = 5; i < table.getColumnCount(); i+=3) {
-			ButtonColumn buttonsColumn = new ButtonColumn(table, i, frame, course);
+			CommentColumn buttonsColumn = new CommentColumn(table, i, frame, course);
 		}
 		//buid column
 		BuidColumn buidColumn = new BuidColumn(table, 0, frame);

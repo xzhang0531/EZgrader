@@ -68,7 +68,6 @@ public class BuidColumn extends AbstractCellEditor implements
 		}
 		
 		renderButton.setText((value == null) ? "" : value.toString());
-
 		renderButton.setBackground(new Color(255, 255, 220));
 		renderButton.setBorder(BorderFactory.createEmptyBorder());;
 		return renderButton;
@@ -178,9 +177,8 @@ public class BuidColumn extends AbstractCellEditor implements
 				d.setVisible(false);
 			}
 		});
+		
 		p.add(btnCancel);
-		
-		
 		d.add(p);
 		d.setLocation(400, 200);
 		d.setSize(330, 330); 

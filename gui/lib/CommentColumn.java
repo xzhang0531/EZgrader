@@ -31,14 +31,14 @@ import objects.Category;
 import objects.Course;
 import objects.Score;
 
-public class ButtonColumn extends AbstractCellEditor implements
+public class CommentColumn extends AbstractCellEditor implements
 	TableCellRenderer, TableCellEditor, ActionListener {
 	JTable table;
 	String text;
 	JFrame frame;
 	Course course;
 	
-	public ButtonColumn(JTable table, int column, JFrame frame, Course course) {
+	public CommentColumn(JTable table, int column, JFrame frame, Course course) {
 		super();
 		this.table = table;
 		this.frame = frame;

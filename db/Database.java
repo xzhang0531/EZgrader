@@ -624,7 +624,7 @@ public class Database {
 			c.setCourseId(lastid);
 			//add student
 			for(Student s: c.getStudentList()) {
-				AddStudent(s);
+				AddStudentWithCheck(s);
 			}
 			//add category
 			for(Category ca: c.getCategoryList()) {

@@ -29,7 +29,7 @@ public class ChangeWeight {
 		frame.getContentPane().setLayout(null);
 		
 		
-		ImageIcon weightLogo1 = new ImageIcon("/home/xzhang/EZgrader/gui/img/weight1.jpg");
+		ImageIcon weightLogo1 = new ImageIcon("gui/img/weight1.jpg");
 		Image weightLogoImage = weightLogo1.getImage();
 		Image newWeightLogoImage = weightLogoImage.getScaledInstance(200, 200,  java.awt.Image.SCALE_SMOOTH);
 		weightLogo1 = new ImageIcon(newWeightLogoImage);
@@ -37,7 +37,7 @@ public class ChangeWeight {
 		buLogoLabel.setBounds(120, 100, weightLogo1.getIconWidth(), weightLogo1.getIconHeight());
 		frame.getContentPane().add(buLogoLabel);
 		
-		ImageIcon weightLogo2 = new ImageIcon("/home/xzhang/EZgrader/gui/img/weight2.jpg");
+		ImageIcon weightLogo2 = new ImageIcon("gui/img/weight2.jpg");
 		Image weightLogoImage2 = weightLogo2.getImage();
 		Image newWeightLogoImage2 = weightLogoImage2.getScaledInstance(200, 200,  java.awt.Image.SCALE_SMOOTH);
 		weightLogo2 = new ImageIcon(newWeightLogoImage2);

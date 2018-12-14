@@ -65,7 +65,7 @@ public class CommentColumn extends AbstractCellEditor implements
 		if(value == null || value.equals("") || value.equals("null")) {
 			
 		} else {
-			ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/info.png");
+			ImageIcon imageIcon = new ImageIcon("gui/img/info.png");
 			Image image = imageIcon.getImage();
 			Image newimg = image.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);

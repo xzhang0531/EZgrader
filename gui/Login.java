@@ -98,7 +98,7 @@ public class Login {
 		
 
 		
-		ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/BU.PNG");
+		ImageIcon imageIcon = new ImageIcon("gui/img/BU.PNG");
 		Image image = imageIcon.getImage();
 		Image newimg = image.getScaledInstance(200, 90,  java.awt.Image.SCALE_SMOOTH);
 		imageIcon = new ImageIcon(newimg);

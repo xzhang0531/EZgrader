@@ -85,7 +85,7 @@ public class Welcome {
 		lblWelcomeProfessor.setBounds(72, 50, 253, 49);
 		frame.getContentPane().add(lblWelcomeProfessor);
 		
-		ImageIcon image = new ImageIcon("/home/xzhang/EZgrader/gui/img/Thank.png");
+		ImageIcon image = new ImageIcon("gui/img/Thank.png");
 		JLabel lblNewLabel = new JLabel(image);
 		lblNewLabel.setBounds(65, 105, image.getIconWidth(), image.getIconHeight());
 		frame.getContentPane().add(lblNewLabel);

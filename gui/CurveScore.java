@@ -64,25 +64,17 @@ public class CurveScore {
 					JOptionPane.showMessageDialog(frame, "Invalid value!");
 					return;
 				}
-				
+				Database db = new Database();
+				db.connect();
 				for(Category category: course.getCategoryList()) {
 					for(Assignment assignment : category.getAssignmentList()) {
 						if(assignment.getAssignmentName().equals(assignmentDropDown.getSelectedItem())){
-							Database db = new Database();
-							db.connect();
-							try {
-								db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
-							}catch(Exception e1) {
-								
-							}finally {
-								db.disconnect();
-							}
-
+							db.updateCurve(course.getCourseId(), assignment.getAssignmentName(), curve);
 						}
 					}
 				}
 				
-				
+				db.disconnect();
 				//then
 				frame.dispose();
 				CourseDetail frame2 = new CourseDetail();

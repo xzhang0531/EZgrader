@@ -29,7 +29,7 @@ public class Database {
 		try{  
 			Class.forName("com.mysql.jdbc.Driver");  
 			Connection conn=DriverManager.getConnection(  
-			"jdbc:mysql://localhost:3306/ezgrader",user,pwd);
+			"jdbc:mysql://localhost:3306/ezgrader?autoReconnect=true&useSSL=false",user,pwd);
 			this.conn = conn;
 		}catch(Exception e) {
 			System.out.println(e);

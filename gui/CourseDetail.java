@@ -67,7 +67,7 @@ public class CourseDetail {
 			
 			//logo
 			
-			ImageIcon buLogo = new ImageIcon("/home/xzhang/EZgrader/gui/img/BU.PNG");
+			ImageIcon buLogo = new ImageIcon("gui/img/BU.PNG");
 			Image buLogoImage = buLogo.getImage();
 			Image newBuLogoImage = buLogoImage.getScaledInstance(150, 80,  java.awt.Image.SCALE_SMOOTH);
 			buLogo = new ImageIcon(newBuLogoImage);
@@ -76,7 +76,7 @@ public class CourseDetail {
 			currentCoursePanel.add(buLogoLabel);
 			
 			
-			ImageIcon logo = new ImageIcon("/home/xzhang/EZgrader/gui/img/exgrader.png");
+			ImageIcon logo = new ImageIcon("gui/img/exgrader.png");
 			Image logoImage = logo.getImage();
 			Image newLogoImage = logoImage.getScaledInstance(640, 90,  java.awt.Image.SCALE_SMOOTH);
 			logo = new ImageIcon(newLogoImage);		
@@ -111,7 +111,7 @@ public class CourseDetail {
 			//add buttons
 			
 			JButton btn_addStudent = new JButton();
-			ImageIcon imageIcon = new ImageIcon("/home/xzhang/EZgrader/gui/img/plus.png");
+			ImageIcon imageIcon = new ImageIcon("gui/img/plus.png");
 			Image image = imageIcon.getImage();
 			Image newimg = image.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon = new ImageIcon(newimg);
@@ -129,7 +129,7 @@ public class CourseDetail {
 			
 			
 			JButton btn_deleteStudent = new JButton();
-			ImageIcon imageIcon2 = new ImageIcon("/home/xzhang/EZgrader/gui/img/minus.png");
+			ImageIcon imageIcon2 = new ImageIcon("gui/img/minus.png");
 			Image image2 = imageIcon2.getImage();
 			Image newimg2 = image2.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
 			imageIcon2 = new ImageIcon(newimg2);

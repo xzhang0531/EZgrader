@@ -578,6 +578,7 @@ public class Database {
 		
 	}
 	
+
 	//add an enrollment, use it when register a student to a course.
 	public boolean AddEnrollment(String buid, int courseid){
 		PreparedStatement stmt = null;

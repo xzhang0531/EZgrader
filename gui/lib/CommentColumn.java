@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -94,6 +95,12 @@ public class CommentColumn extends AbstractCellEditor implements
 
 	public void actionPerformed(ActionEvent e) {
 		fireEditingStopped();
+		String pointslost = (String) table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn() - 2);
+		if(pointslost == null) {
+			JOptionPane.showMessageDialog(frame, "You must enter the pointslost before leaving a comment!");
+			return;
+		}
+		
 		JDialog d = new JDialog(frame, "Comment"); 
 		JPanel p = new JPanel();
 		p.setLayout(null);

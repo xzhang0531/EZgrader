@@ -58,7 +58,7 @@ public class ChangeWeight {
 		
 		
 		
-		JButton btnNewButton = new JButton("Component");
+		JButton btnNewButton = new JButton("Type of Assignment");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -66,10 +66,10 @@ public class ChangeWeight {
 				frame2.frame.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(146, 350, 160, 29);
+		btnNewButton.setBounds(126, 350, 180, 29);
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton button = new JButton("Sub-Component");
+		JButton button = new JButton("Specific Assignment");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
@@ -78,7 +78,7 @@ public class ChangeWeight {
 				
 			}
 		});
-		button.setBounds(376, 350, 160, 29);
+		button.setBounds(366, 350, 180, 29);
 		frame.getContentPane().add(button);
 	}
 }

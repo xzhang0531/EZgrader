@@ -103,31 +103,31 @@ public class BuidColumn extends AbstractCellEditor implements
 		
 		JLabel lblNewLabel = new JLabel("Student Information");
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		lblNewLabel.setBounds(59, 6, 191, 16);
+		lblNewLabel.setBounds(59, 6, 220, 16);
 		p.add(lblNewLabel);
 		
 		JLabel lblStudentName = new JLabel("Student Name:");
-		lblStudentName.setBounds(39, 38, 96, 16);
+		lblStudentName.setBounds(39, 38, 200, 16);
 		p.add(lblStudentName);
 		
 		JLabel lblBuid = new JLabel("BUID:");
-		lblBuid.setBounds(91, 75, 38, 16);
+		lblBuid.setBounds(106, 75, 40, 16);
 		p.add(lblBuid);
 		
 		JLabel lblNewLabel_1 = new JLabel("Student Type:");
-		lblNewLabel_1.setBounds(44, 105, 96, 16);
+		lblNewLabel_1.setBounds(44, 105, 100, 16);
 		p.add(lblNewLabel_1);
 		
 		JLabel lblMajor = new JLabel("Major:");
-		lblMajor.setBounds(88, 165, 44, 16);
+		lblMajor.setBounds(99, 165, 50, 16);
 		p.add(lblMajor);
 		
 		JLabel lblCollege = new JLabel("College:");
-		lblCollege.setBounds(77, 135, 51, 16);
+		lblCollege.setBounds(86, 135, 60, 16);
 		p.add(lblCollege);
 		
 		JLabel lblGpa = new JLabel("GPA:");
-		lblGpa.setBounds(94, 195, 33, 16);
+		lblGpa.setBounds(111, 195, 40, 16);
 		p.add(lblGpa);
 		
 		

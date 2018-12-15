@@ -109,7 +109,7 @@ public class ChangeTypeWeightG {
 					total += value;
 				}
 				
-				if (total != 1.0) {
+				if (1.0 - total > 1e-6) {
 					JOptionPane.showMessageDialog(frame, "Values must be added up to one!");
 					weightMap.clear();
 					return;

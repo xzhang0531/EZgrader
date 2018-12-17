@@ -44,8 +44,8 @@ public class Score implements Comparable<Score>{
 		return maxScore - this.pointsLost;
 	}
 
-	public double calculatePercentage(double maxScore) {
-		double percentage = (maxScore - this.pointsLost) / maxScore * 100;
+	public double calculatePercentage(double maxScore, double curve) {
+		double percentage = (maxScore - this.pointsLost + curve) / maxScore * 100;
 		setPercentage(percentage);
 		return percentage;
 	}

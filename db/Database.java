@@ -246,7 +246,7 @@ public class Database {
 						for(Category category: course.getCategoryList()) {
 							for(Assignment assignment:category.getAssignmentList()) {
 								if(assignment.getAssignmentName().equals(assignmentname)) {
-									newScore.setPercentage(newScore.calculatePercentage(assignment.getMaxScore()));
+									newScore.setPercentage(newScore.calculatePercentage(assignment.getMaxScore(), assignment.getCurvedScore()));
 									assignment.getScoreList().put(getStudentById(buid), newScore);
 								}
 							}
@@ -439,6 +439,26 @@ public class Database {
 			stmt.setString(6, categoryname);
 			stmt.setDouble(7, a.getMaxScore());
 			stmt.setDouble(8, a.getCurvedScore());
+			stmt.executeUpdate();
+			return true;
+		}catch(Exception e) {
+			System.out.println(e);
+			return false;
+		}finally {
+			try {
+				if (stmt != null) stmt.close();
+			}catch(Exception e) {}
+		}
+	}
+	
+	
+	//Delete an assignment from database
+	public boolean deleteAssignment(String assignmentname, int courseid) {
+		PreparedStatement stmt = null;
+		try {
+			stmt=conn.prepareStatement("DELETE FROM Assignment WHERE courseid = ? AND assignmentname = ?");
+			stmt.setInt(1, courseid);
+			stmt.setString(2, assignmentname);
 			stmt.executeUpdate();
 			return true;
 		}catch(Exception e) {

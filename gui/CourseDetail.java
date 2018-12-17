@@ -78,10 +78,10 @@ public class CourseDetail {
 			
 			ImageIcon logo = new ImageIcon("gui/img/exgrader.png");
 			Image logoImage = logo.getImage();
-			Image newLogoImage = logoImage.getScaledInstance(640, 90,  java.awt.Image.SCALE_SMOOTH);
+			Image newLogoImage = logoImage.getScaledInstance(616, 90,  java.awt.Image.SCALE_SMOOTH);
 			logo = new ImageIcon(newLogoImage);		
 			JLabel logoLabel = new JLabel(logo);
-			logoLabel.setBounds(610, 12, logo.getIconWidth(), logo.getIconHeight());
+			logoLabel.setBounds(634, 12, logo.getIconWidth(), logo.getIconHeight());
 			currentCoursePanel.add(logoLabel);
 			
 
@@ -89,7 +89,7 @@ public class CourseDetail {
 			//control panels
 			JPanel Settings = new JPanel();
 			Settings.setLayout(null);
-			Settings.setBounds(49, 10, 256, 90);
+			Settings.setBounds(49, 10, 272, 90);
 			Border blackline = BorderFactory.createLineBorder(Color.GRAY);
 			Settings.setBorder(BorderFactory.createTitledBorder(blackline, "Course Settings"));
 			currentCoursePanel.add(Settings);
@@ -98,13 +98,13 @@ public class CourseDetail {
 			
 			JPanel Summarize = new JPanel();
 			Summarize.setLayout(null);
-			Summarize.setBounds(314, 10, 136, 90);
+			Summarize.setBounds(330, 10, 144, 90);
 			Summarize.setBorder(BorderFactory.createTitledBorder(blackline, "Summarize Data"));
 			currentCoursePanel.add(Summarize);
 			
 			JPanel Command = new JPanel();
 			Command.setLayout(null);
-			Command.setBounds(459, 10, 136, 90);
+			Command.setBounds(483, 10, 136, 90);
 			Command.setBorder(BorderFactory.createTitledBorder(blackline, "Command"));
 			currentCoursePanel.add(Command);
 			
@@ -148,7 +148,7 @@ public class CourseDetail {
 			
 			
 			JButton btn_curveScore = new JButton("Curve");
-			btn_curveScore.setBounds(130, 20, 117, 25);
+			btn_curveScore.setBounds(138, 20, 125, 25);
 			btn_curveScore.setFont(new Font("Arial", Font.BOLD, 9));
 			Settings.add(btn_curveScore);
 			btn_curveScore.addActionListener(new ActionListener() {
@@ -162,7 +162,7 @@ public class CourseDetail {
 			
 			
 			JButton btn_addComponent = new JButton("Add Component");
-			btn_addComponent.setBounds(10, 20, 117, 25);
+			btn_addComponent.setBounds(10, 20, 125, 25);
 			btn_addComponent.setFont(new Font("Arial", Font.BOLD, 9));
 			Settings.add(btn_addComponent);
 			btn_addComponent.addActionListener(new ActionListener() {
@@ -173,6 +173,20 @@ public class CourseDetail {
 					
 				}
 			});
+			
+			JButton btn_deleteComponent = new JButton("Delete Component");
+			btn_deleteComponent.setBounds(10, 50, 125, 25);
+			btn_deleteComponent.setFont(new Font("Arial", Font.BOLD, 9));
+			Settings.add(btn_deleteComponent);
+			btn_deleteComponent.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					frame.dispose();
+					DeleteComponent btn_deleteComponent = new DeleteComponent(db, course);
+					btn_deleteComponent.frame.setVisible(true);
+					
+				}
+			});
+			
 			
 			JButton btn_logout = new JButton("Logout");
 			btn_logout.setBounds(10, 50, 117, 25);
@@ -208,7 +222,7 @@ public class CourseDetail {
 					frame2.frame.setVisible(true);
 				}
 			});
-			btn_changeweight.setBounds(10, 50, 117, 25);
+			btn_changeweight.setBounds(138, 50, 125, 25);
 			btn_changeweight.setFont(new Font("Arial", Font.BOLD, 9));
 			Settings.add(btn_changeweight);
 			
@@ -216,7 +230,7 @@ public class CourseDetail {
 			
 			
 			JButton btn_printStat = new JButton("Print Statistics");
-			btn_printStat.setBounds(10, 50, 117, 25);
+			btn_printStat.setBounds(10, 50, 125, 25);
 			btn_printStat.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_printStat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -306,7 +320,7 @@ public class CourseDetail {
 			currentCoursePanel.add(sp);
 			//calc final
 			JButton btn_calFinal = new JButton("Calculate Final");
-			btn_calFinal.setBounds(10, 20, 117, 25);
+			btn_calFinal.setBounds(10, 20, 125, 25);
 			btn_calFinal.setFont(new Font("Arial", Font.BOLD, 9));
 			btn_calFinal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -477,7 +491,7 @@ public class CourseDetail {
 					db.updateDB();
 					Course newestCourse = db.getCourseById(courseid);
 					double newPercentage = newestCourse.getAssignment(assignmentname).getScoreList().get(db.getStudentById(buid)).getPercentage();
-					dm.setValueAt(String.valueOf(newPercentage), row, column + 1);
+					dm.setValueAt(String.format("%.2f", newPercentage), row, column + 1);
 				}
 			}
 		};

@@ -41,8 +41,29 @@ public class DeleteComponent {
 		btn_delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String componentname = componentDropDown.getSelectedItem().toString();
-						
 				db.deleteAssignment(componentname, course.getCourseId());
+				String categoryname = null;
+				for(Category c : course.getCategoryList()) {
+					for(Assignment a :c.getAssignmentList()) {
+						if(a.getAssignmentName().equals(componentname)) {
+							categoryname = c.getCategoryName();
+						}
+					}
+				}
+				
+				for(Category c : course.getCategoryList()) {
+					if (c.getCategoryName().equals(categoryname)) {
+						for(Assignment a: c.getAssignmentList()) {
+							int size = c.getAssignmentList().size() - 1;
+							double weight = 1.0 / (size);
+							db.updateAssignmentWeight("g", course.getCourseId(), a.getAssignmentName(), weight);
+							db.updateAssignmentWeight("ug", course.getCourseId(), a.getAssignmentName(), weight);
+						}
+					}
+				}
+				
+				
+
 				
 				frame.dispose();
 				CourseDetail c = new CourseDetail();

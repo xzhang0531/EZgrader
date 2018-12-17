@@ -212,7 +212,7 @@ public class EditComponents {
 			    		}
 			    }
 			    
-			    if(1 - totalWeight > 1e-6) {
+			    if(1 - totalWeight > 1e-6 || totalWeight - 1 > 1e-6) {
 			    	JOptionPane.showMessageDialog(frame, "Weights must add up to one!");
 			    	weightPair.removeAll(weightPair);
 			    	return;
